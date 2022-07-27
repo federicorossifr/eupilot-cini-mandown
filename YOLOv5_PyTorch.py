@@ -53,7 +53,6 @@ class YOLOv5_PyTorch:
     def post_process(self, output):
         # Post-process model output
         pred = output.pandas().xyxy[0]
-        pred_shape = pred.shape  # get output shape
         pred = pred.to_numpy()  # from Pandas to NumPy
         pred = np.delete(pred, 6, 1)  # Delete class names
         pred = pred[None]
