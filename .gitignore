@@ -1,5 +1,6 @@
 __pycache__
 
+# Folders
 yolov5-ultralytics
 data
 saved
@@ -11,4 +12,8 @@ yolov5m.pt
 yolov5l.pt
 yolov5x.pt
 
+# COCO classes
 classes.json
+
+# Extra scripts
+man_down_test.py
