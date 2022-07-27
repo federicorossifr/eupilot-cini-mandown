@@ -9,7 +9,11 @@ from utilities import LoadImages, LoadWebcam, Annotator, increment_path, colorst
 
 class Algorithm:
     
-    def __init__(self, model_weights, classes_dict_path):
+    def __init__(self, model_weights, classes_dict_path, source_path, output_path, dir_name):
+
+        self.source_path = source_path
+        self.output_path = output_path
+        self.dir_name = dir_name
 
         # YOLOv5 properties:
         yolov5_properties = {
@@ -20,12 +24,12 @@ class Algorithm:
             'prob_thresh': 0.25,
         }
 
+        # Initialize detector:
+        self.detector = YOLOv5_PyTorch(properties = yolov5_properties)
+
         # Algorithm properties:
         self.num_pers_thresh = 10
         self.ratio_thresh = 1.0
-
-        # Initialize detector:
-        self.detector = YOLOv5_PyTorch(properties = yolov5_properties)
         
         setattr(self, 'ind', 0)  # detection id counter
 
@@ -80,17 +84,17 @@ class Algorithm:
 
         return output_img
         
-    def run(self, source_path, output_path, dir_name):
+    def run(self):
 
         exist_ok = False
         save_txt = False
         webcam = False
 
         # Directories
-        save_dir = increment_path(Path(output_path) / dir_name, exist_ok = exist_ok)  # increment run
+        save_dir = increment_path(Path(self.output_path) / self.dir_name, exist_ok = exist_ok)  # increment run
         (save_dir / 'labels' if save_txt else save_dir).mkdir(parents = True, exist_ok = True)  # make dir
 
-        source = str(source_path)
+        source = str(self.source_path)
         dataset = LoadImages(source)
         bs = 1  # batch_size
         vid_path, vid_writer = [None] * bs, [None] * bs
