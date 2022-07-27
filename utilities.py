@@ -1,6 +1,7 @@
 import os, glob, re, time
 from pathlib import Path
 import torch
+import torch.nn as nn
 import torchvision
 import numpy as np
 import cv2

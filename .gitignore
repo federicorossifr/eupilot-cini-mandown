@@ -1,11 +1,13 @@
 
+yolov5-ultralytics
 data
-models
+saved
+
+# PyTorch models
+yolov5n.pt
+yolov5s.pt
+yolov5m.pt
+yolov5l.pt
+yolov5x.pt
 
 classes.json
-
-GPU_test.py
-man_down_test.py
-man_down.py
-
-YOLOv5_TensorRT.py
