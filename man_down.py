@@ -30,6 +30,7 @@ class Algorithm:
         # Algorithm properties:
         self.num_pers_thresh = 10
         self.ratio_thresh = 1.0
+        self.batch_size = 1
         
         setattr(self, 'ind', 0)  # detection id counter
 
@@ -131,4 +132,4 @@ class Algorithm:
         print(f"Results saved to {colorstr('white', 'bold', save_dir)}{s}")
 
     def queryBatchSize(self) -> int:
-        return 1
+        return self.batch_size
