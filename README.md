@@ -4,7 +4,8 @@
 1) man_down.py --> Python script that implement the man down algorithm
 2) YOLOv5_PyTorch.py --> Python script that implement the detection layer using YOLOv5 pretrained on COCO dataset
 3) utilities.py --> Python script that contains useful methods such as NMS, IoU, ecc... 
-4) man_down_test.py --> Python testing script 
+4) man_down_test.py --> Python testing script
+5) classes.json --> JSON file which includes YOLO classes
 
 ## Algorithm informations
 Algorithm inputs:
