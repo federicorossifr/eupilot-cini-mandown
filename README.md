@@ -3,7 +3,8 @@
 ## Scripts
 1) man_down.py --> Python script that implement the man down algorithm
 2) YOLOv5_PyTorch.py --> Python script that implement the detection layer using YOLOv5 pretrained on COCO dataset
-3) man_down_test.py --> Python testing script 
+3) utilities.py --> Python script that contains useful methods such as NMS, IoU, ecc... 
+4) man_down_test.py --> Python testing script 
 
 ## Algorithm informations
 Algorithm inputs:
@@ -17,8 +18,8 @@ Algoritm outputs:
 1) Folder that contains image/images or video/videos processed
 
 ## Formats accepted
-1) IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp'  # include image suffixes
-2) VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
+- IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp'  # include image suffixes
+- VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
 
-## Ultralytics Github Repository
+## Ultralytics GitHub Repository
 https://github.com/ultralytics/yolov5
