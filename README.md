@@ -8,14 +8,14 @@
 
 ## Algorithm informations
 Algorithm inputs:
-1) Model weights (such as 'yolov5s', 'yolov5l', 'yolov5x' ecc..) 
-2) Classes dictionary path
-3) Source path (path of the image or video file that sould be process)
-4) Output path 
-5) Name of the directory where the output files is saved
+- Model weights (such as 'yolov5s', 'yolov5l', 'yolov5x' ecc..) 
+- Classes dictionary path
+- Source path (path of the image or video file that sould be process)
+- Output path 
+- Name of the directory where the output files is saved
 
 Algoritm outputs:
-1) Folder that contains image/images or video/videos processed
+- Folder that contains image/images or video/videos processed
 
 ## Formats accepted
 - IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp'  # include image suffixes
