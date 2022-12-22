@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 import torch
 
-from utils.general import LOGGER, is_colab, is_kaggle, clean_str, check_requirements
+from man_down_utils.general import LOGGER, is_colab, is_kaggle, clean_str, check_requirements
 
 IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm'  # include image suffixes
 VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes

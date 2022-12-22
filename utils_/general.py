@@ -20,7 +20,7 @@ import pkg_resources as pkg
 import torch
 import torchvision
 
-from utils.visualization import colorstr
+from man_down_utils.visualization import colorstr
 from subprocess import check_output
 
 FILE = Path(__file__).resolve() # current file path (man_down_tracking.py path)
