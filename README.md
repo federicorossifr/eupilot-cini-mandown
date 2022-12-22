@@ -4,7 +4,7 @@ This repository contains a configurable man down tracker. The detections generat
 
 ## Code
 
-### man_down_tracking.py 
+#### man_down_tracking.py 
 Python script that run the man down tracking and counting algorithm.ù
 
 #### man_down
@@ -19,6 +19,7 @@ Folder containing useful methods for loading, storage and visualize data.
 #### configs
 Folder containing yaml file of YOLOv5 classes and deepSORT parameters.
 
+
 ## Algorithm informations
 Algorithm inputs:
 - YOLO Model weights (such as 'yolov5s', 'yolov5l', 'yolov5x', etc..) 
@@ -28,9 +29,14 @@ Algorithm inputs:
 Algoritm outputs:
 - Folder that contains video/videos processed
 
+
 ## Formats accepted
 - IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp'  # include image suffixes
 - VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
 
-## Ultralytics GitHub Repository
+
+#### Ultralytics GitHub Repository
 https://github.com/ultralytics/yolov5
+
+#### DeepSORT Github Official Repository
+https://github.com/nwojke/deep_sort
