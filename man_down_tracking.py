@@ -23,10 +23,10 @@ if str(ROOT / 'man_down') not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from yolov5.models.common import DetectMultiBackend
-from man_down_utils.general import non_max_suppression, time_sync, check_img_size, check_file, check_imshow, increment_path, select_device
-from man_down_utils.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS
-from man_down_utils.visualization import Annotator, colors, colorstr
-from man_down_utils.memorization import SaveData
+from utils_.general import non_max_suppression, time_sync, check_img_size, check_file, check_imshow, increment_path, select_device
+from utils_.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS
+from utils_.visualization import Annotator, colors, colorstr
+from utils_.memorization import SaveData
 from deep_sort.deep_sort import DeepSort
 from man_down.man_down import ManDown
 
