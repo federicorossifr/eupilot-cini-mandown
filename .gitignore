@@ -1,13 +1,7 @@
 __pycache__
 
 # Folders
-yolov5-ultralytics
-data
-saved
-
-# PyTorch models
-yolov5n.pt
-yolov5s.pt
-yolov5m.pt
-yolov5l.pt
-yolov5x.pt
+yolov5
+weights
+sources
+results

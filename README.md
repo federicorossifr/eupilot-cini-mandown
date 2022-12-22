@@ -1,4 +1,4 @@
-# EuPilot CINI - YOLO Man Down Detection
+# EuPilot CINI - YOLO Man Down Tracking and Counting
 
 ## Scripts
 1) man_down.py --> Python script that implement the man down algorithm
