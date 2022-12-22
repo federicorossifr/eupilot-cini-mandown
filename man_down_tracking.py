@@ -43,8 +43,8 @@ path/                            # directory
 'https://youtu.be/Zgi9g1ksQHc'   # YouTube
 'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
 '''
-# source = ROOT / 'sources/images/img7.jpg'
-source = ROOT / 'sources/videos/vid7.mp4'
+source = ROOT / 'sources/images/img1.png'
+# source = ROOT / 'sources/videos/vid1.mp4'
 # source = 1
 yolo_weights = WEIGHTS / 'yolov5x.pt'
 reid_weights = WEIGHTS / 'osnet_x0_75_msmt17.pt'
