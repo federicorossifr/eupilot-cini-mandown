@@ -48,34 +48,24 @@ source = ROOT / 'sources/videos/vid1.mp4'
 yolo_weights = WEIGHTS / 'yolov5x.onnx'
 reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
 yolo_classes_path = ROOT / 'configs/coco.yaml'
-yolo_classes_to_detect = 0
+yolo_classes_to_detect = 0  # filter by class: --class 0, or --class 0 2 3
 deep_sort_parameters_path = ROOT / 'configs/deep_sort.yaml'
 ratio_thres = 1.0  # w/h ratio threshold for man down filter
 imgsz = (640, 640)
-conf_thres = 0.25  # confidence threshold (CONVERT TO INT AND PASS TO NMS)
-iou_thres = 0.45  # NMS IOU threshold (CONVERT TO INT AND PASS TO NMS)
-max_det = 1000  # maximum detections per image (CONVERT TO INT AND PASS TO NMS)
+conf_thres = 0.25  # confidence threshold
+iou_thres = 0.45  # NMS IOU threshold
+max_det = 1000  # maximum detections per image
 device = ''
 view_img = False
 save_txt = False  # save results to *.txt
-save_conf = False
-save_crops = False
-classes_filter = 0  # filter by class: --class 0, or --class 0 2 3
-agnostic_nms = False
 nosave = False  # do not save images/videos
 augment = False
 visualize = False
-update = False
-exist_ok = False
 project = ROOT / 'results'
 name = 'test'
 line_thickness = 3  # bounding box thickness (pixels)
-hide_labels = False  # hide labels
-hide_conf = False  # hide confidences
 half = False
-dnn = False
 vid_stride = 1
-evaluate = True
 show_vid = False 
 save_vid = True 
 save_data = True
@@ -90,13 +80,13 @@ if is_url and is_file:
     source = check_file(source)  # download
 
 # Directories:
-save_dir = increment_path(Path(project) / name, exist_ok = exist_ok)  # increment run
+save_dir = increment_path(Path(project) / name, exist_ok = False)  # increment run
 (save_dir / 'labels' if save_txt else save_dir).mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector (YOLOv5):
 device = select_device(device)
 # device = torch.device('cpu')
-model = DetectMultiBackend(yolo_weights, device = device, dnn = dnn, data = yolo_classes_path, fp16 = half)
+model = DetectMultiBackend(yolo_weights, device = device, dnn = False, data = yolo_classes_path, fp16 = half)
 stride, names, pt, onnx, engine = model.stride, model.names, model.pt, model.onnx, model.engine
 imgsz = check_img_size(imgsz, s = stride)  # check image size
 
@@ -154,7 +144,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Apply NMS:
     t5 = time_sync()
-    pred = non_max_suppression(pred, conf_thres = 0.25, iou_thres = 0.45, classes = yolo_classes_to_detect, max_det = 1000)
+    pred = non_max_suppression(pred, conf_thres = conf_thres, iou_thres = iou_thres, classes = yolo_classes_to_detect, max_det = max_det)
     t6 = time_sync()
     dt[2] = t6 - t5
 
