@@ -7,7 +7,7 @@ from utils_.loading import yaml_load
 from deep_sort.nn_matching import NearestNeighborDistanceMetric
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
-from deep_sort.reid_multibackend import ReIDDetectMultiBackend
+from reid.reid_multibackend import ReIDDetectMultiBackend
 
 class DeepSort(object):
 

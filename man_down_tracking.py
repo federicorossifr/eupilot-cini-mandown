@@ -16,6 +16,8 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 if str(ROOT / 'yolov5') not in sys.path:
     sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 to PATH
+if str(ROOT / 'reid') not in sys.path:
+    sys.path.append(str(ROOT / 'reid'))  # add reid to PATH
 if str(ROOT / 'deep_sort') not in sys.path:
     sys.path.append(str(ROOT / 'deep_sort'))  # add deep_sort to PATH
 if str(ROOT / 'man_down') not in sys.path:
@@ -45,8 +47,8 @@ path/                            # directory
 '''
 # source = ROOT / 'sources/images/img1.png'
 source = ROOT / 'sources/videos/vid1.mp4'
-yolo_weights = WEIGHTS / 'yolov5x.onnx'
-reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
+yolo_weights = WEIGHTS / 'yolov5x.engine'
+reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.engine'
 yolo_classes_path = ROOT / 'configs/coco.yaml'
 yolo_classes_to_detect = 0  # filter by class: --class 0, or --class 0 2 3
 deep_sort_parameters_path = ROOT / 'configs/deep_sort.yaml'
