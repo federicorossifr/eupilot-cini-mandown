@@ -4,20 +4,20 @@ This repository contains a configurable man down tracker. The detections generat
 
 ## Code
 
-#### man_down_tracking.py 
-Python script that run the man down tracking and counting algorithm.ù
+- man_down_tracking.py 
+Python script that run the man down algorithm.
 
-#### man_down
-Folder containing man down script.
+- man_down
+Folder containing man down python script.
 
-#### deep_sort 
+- deep_sort
 Folder containing the deepSORT algorithm python scripts.
 
-#### utils_ 
+- utils_
 Folder containing useful methods for loading, storage and visualize data.
 
-#### configs
-Folder containing yaml file of YOLOv5 classes and deepSORT parameters.
+- configs
+Folder containing YOLOv5 classes and deepSORT parameters yaml files.
 
 
 ## Algorithm informations

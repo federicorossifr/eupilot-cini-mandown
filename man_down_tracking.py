@@ -30,7 +30,7 @@ from utils_.memorization import SaveData
 from deep_sort.deep_sort import DeepSort
 from man_down.man_down import ManDown
 
-logging.getLogger().removeHandler(logging.getLogger().handlers[0])
+# logging.getLogger().removeHandler(logging.getLogger().handlers[0])
 
 # Parameters:
 '''
@@ -52,9 +52,9 @@ yolo_classes_to_detect = 0
 deep_sort_parameters_path = ROOT / 'configs/deep_sort.yaml'
 ratio_thres = 1.0  # w/h ratio threshold for man down filter
 imgsz = (640, 640)
-conf_thres = 0.25,  # confidence threshold (CONVERT TO INT AND PASS TO NMS)
-iou_thres = 0.45,  # NMS IOU threshold (CONVERT TO INT AND PASS TO NMS)
-max_det = 1000,  # maximum detections per image (CONVERT TO INT AND PASS TO NMS)
+conf_thres = 0.25  # confidence threshold (CONVERT TO INT AND PASS TO NMS)
+iou_thres = 0.45  # NMS IOU threshold (CONVERT TO INT AND PASS TO NMS)
+max_det = 1000  # maximum detections per image (CONVERT TO INT AND PASS TO NMS)
 device = ''
 view_img = False
 save_txt = False  # save results to *.txt
