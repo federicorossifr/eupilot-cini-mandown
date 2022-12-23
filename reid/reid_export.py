@@ -1,3 +1,5 @@
+'''Re-Identification CNN Export Script'''
+
 import argparse
 
 import os
@@ -270,7 +272,7 @@ if __name__ == "__main__":
     model.eval()
 
     if args.optimize:
-        assert device.type == 'cpu', '--optimize not compatible with cuda devices, i.e. use --device cpu'
+        assert args.device.type == 'cpu', '--optimize not compatible with cuda devices, i.e. use --device cpu'
     
     im = torch.zeros(args.batch_size, 3, args.imgsz[0], args.imgsz[1]).to(args.device)  # image size(1,3,640,480) BCHW iDetection
     for _ in range(2):
@@ -288,10 +290,6 @@ if __name__ == "__main__":
         f[1] = export_engine(model, im, args.weights, args.half, args.dynamic, args.simplify, args.workspace, args.verbose)
     if onnx:  # OpenVINO requires ONNX
         f[2] = export_onnx(model, im, args.weights, args.opset, args.dynamic, args.simplify)  # opset 12
-    if openvino:
-        f[3] = export_openvino(args.weights, args.half)
-    if tflite:
-        export_tflite(f, False)
 
     # Finish
     f = [str(x) for x in f if x]  # filter out '' and None

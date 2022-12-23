@@ -13,10 +13,6 @@ import gdown
 from os.path import exists as file_exists
 
 from yolov5.utils.general import LOGGER, check_version, check_requirements
-# from strong_sort.deep.reid_model_factory import (show_downloadeable_models, get_model_url, get_model_name,
-#                                                          download_url, load_pretrained_weights)
-# from strong_sort.deep.models import build_model
-
 from reid.reid_model_factory import show_downloadeable_models, get_model_url, get_model_name, load_pretrained_weights
 from reid.models import build_model
 

@@ -230,7 +230,6 @@ def non_max_suppression(
         if classes is not None:
             
             x = x[(x[:, 5:6] == torch.tensor(classes, device = x.device)).any(1)]
-            print("x ", x)
 
         # Apply finite constraint
         # if not torch.isfinite(x).all():
@@ -375,7 +374,7 @@ def check_online():
 
     return run_once() or run_once()  # check twice to increase robustness to intermittent connectivity issues
 
-def check_requirements(requirements=ROOT / 'requirements.txt', exclude=(), install=True, cmds=''):
+def check_requirements(requirements = ROOT / 'requirements.txt', exclude=(), install=True, cmds=''):
     # Check installed dependencies meet YOLOv5 requirements (pass *.txt file or list of packages or single package str)
     prefix = colorstr('red', 'bold', 'requirements:')
     check_python()  # check python version

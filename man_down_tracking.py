@@ -32,8 +32,6 @@ from utils_.memorization import SaveData
 from deep_sort.deep_sort import DeepSort
 from man_down.man_down import ManDown
 
-# logging.getLogger().removeHandler(logging.getLogger().handlers[0])
-
 # Parameters:
 '''
 Source:
