@@ -2,6 +2,7 @@
 
 import os
 import glob
+import yaml
 from pathlib import Path
 import time
 import math
@@ -48,6 +49,11 @@ def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleF
     left, right = int(round(dw - 0.1)), int(round(dw + 0.1))
     im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)  # add border
     return im, ratio, (dw, dh)
+
+def yaml_load(file='data.yaml'):
+    # Single-line safe yaml loading
+    with open(file, errors='ignore') as f:
+        return yaml.safe_load(f)
 
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`

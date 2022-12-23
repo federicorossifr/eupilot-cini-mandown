@@ -24,7 +24,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from yolov5.models.common import DetectMultiBackend
 from utils_.general import non_max_suppression, time_sync, check_img_size, check_file, check_imshow, increment_path, select_device
-from utils_.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS
+from utils_.loading import LoadImages, LoadStreams, yaml_load, IMG_FORMATS, VID_FORMATS
 from utils_.visualization import Annotator, colors, colorstr
 from utils_.memorization import SaveData
 from deep_sort.deep_sort import DeepSort
@@ -43,13 +43,13 @@ path/                            # directory
 'https://youtu.be/Zgi9g1ksQHc'   # YouTube
 'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
 '''
-source = ROOT / 'sources/images/img1.png'
-# source = ROOT / 'sources/videos/vid1.mp4'
-# source = 1
-yolo_weights = WEIGHTS / 'yolov5x.pt'
-reid_weights = WEIGHTS / 'osnet_x0_75_msmt17.pt'
+# source = ROOT / 'sources/images/img1.png'
+source = ROOT / 'sources/videos/vid1.mp4'
+yolo_weights = WEIGHTS / 'yolov5x.onnx'
+reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
 yolo_classes_path = ROOT / 'configs/coco.yaml'
-yolo_classes_to_detect = 0  # Convert to ['person'] ...
+yolo_classes_to_detect = 0
+deep_sort_parameters_path = ROOT / 'configs/deep_sort.yaml'
 ratio_thres = 1.0  # w/h ratio threshold for man down filter
 imgsz = (640, 640)
 conf_thres = 0.25,  # confidence threshold (CONVERT TO INT AND PASS TO NMS)
@@ -104,7 +104,7 @@ imgsz = check_img_size(imgsz, s = stride)  # check image size
 man_down = ManDown(ratio_thres = ratio_thres)
 
 # Load Deep Sort Algorithm:
-deep_sort = DeepSort(reid_weights, device = device, fp16 = half)
+deep_sort = DeepSort(reid_weights, data = deep_sort_parameters_path, device = device, fp16 = half)
 
 # Load Data Saver:
 data_saver = SaveData(save_dir, device)

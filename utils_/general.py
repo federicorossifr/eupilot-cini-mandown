@@ -8,7 +8,6 @@ from pathlib import Path
 import urllib
 import logging
 import platform
-import yaml
 import time
 from datetime import datetime
 import math
@@ -130,7 +129,7 @@ def box_area(box):
     # box = xyxy(4,n)
     return (box[2] - box[0]) * (box[3] - box[1])
 
-def box_iou(box1, box2, eps=1e-7):
+def box_iou(box1, box2, eps = 1e-7):
     # https://github.com/pytorch/vision/blob/master/torchvision/ops/boxes.py
     """
     Return intersection-over-union (Jaccard index) of boxes.
@@ -152,14 +151,14 @@ def box_iou(box1, box2, eps=1e-7):
 
 def non_max_suppression(
         prediction,
-        conf_thres=0.25,
-        iou_thres=0.45,
-        classes=None,
-        agnostic=False,
-        multi_label=False,
-        labels=(),
-        max_det=300,
-        nm=0,  # number of masks
+        conf_thres = 0.25,
+        iou_thres = 0.45,
+        classes = None,
+        agnostic = False,
+        multi_label = False,
+        labels = (),
+        max_det = 300,
+        nm = 0,  # number of masks
 ):
     """Non-Maximum Suppression (NMS) on inference results to reject overlapping detections
 
@@ -193,7 +192,7 @@ def non_max_suppression(
 
     t = time.time()
     mi = 5 + nc  # mask start index
-    output = [torch.zeros((0, 6 + nm), device=prediction.device)] * bs
+    output = [torch.zeros((0, 6 + nm), device = prediction.device)] * bs
     for xi, x in enumerate(prediction):  # image index, image inference
         # Apply constraints
         # x[((x[..., 2:4] < min_wh) | (x[..., 2:4] > max_wh)).any(1), 4] = 0  # width-height
@@ -202,7 +201,7 @@ def non_max_suppression(
         # Cat apriori labels if autolabelling
         if labels and len(labels[xi]):
             lb = labels[xi]
-            v = torch.zeros((len(lb), nc + nm + 5), device=x.device)
+            v = torch.zeros((len(lb), nc + nm + 5), device = x.device)
             v[:, :4] = lb[:, 1:5]  # box
             v[:, 4] = 1.0  # conf
             v[range(len(lb)), lb[:, 0].long() + 5] = 1.0  # cls
@@ -229,7 +228,9 @@ def non_max_suppression(
 
         # Filter by class
         if classes is not None:
-            x = x[(x[:, 5:6] == torch.tensor(classes, device=x.device)).any(1)]
+            
+            x = x[(x[:, 5:6] == torch.tensor(classes, device = x.device)).any(1)]
+            print("x ", x)
 
         # Apply finite constraint
         # if not torch.isfinite(x).all():
@@ -240,9 +241,9 @@ def non_max_suppression(
         if not n:  # no boxes
             continue
         elif n > max_nms:  # excess boxes
-            x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
+            x = x[x[:, 4].argsort(descending = True)[:max_nms]]  # sort by confidence
         else:
-            x = x[x[:, 4].argsort(descending=True)]  # sort by confidence
+            x = x[x[:, 4].argsort(descending = True)]  # sort by confidence
 
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
@@ -439,11 +440,6 @@ def git_describe(path=ROOT):  # path must be a directory
         return check_output(f'git -C {path} describe --tags --long --always', shell=True).decode()[:-1]
     except Exception:
         return ''
-
-def yaml_load(file='data.yaml'):
-    # Single-line safe yaml loading
-    with open(file, errors='ignore') as f:
-        return yaml.safe_load(f)
 
 def select_device(device='', batch_size=0, newline=True):
     # device = None or 'cpu' or 0 or '0' or '0,1,2,3'
