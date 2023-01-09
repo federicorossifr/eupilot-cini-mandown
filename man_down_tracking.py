@@ -2,11 +2,9 @@
 
 import os
 import sys
-import logging
 from pathlib import Path
 import argparse
 import cv2
-import numpy as np
 import torch
 
 FILE = Path(__file__).resolve() # current file path (man_down_tracking.py path)
@@ -85,7 +83,6 @@ save_dir = increment_path(Path(project) / name, exist_ok = False)  # increment r
 
 # Load Object Detector (YOLOv5):
 device = select_device(device)
-# device = torch.device('cpu')
 model = DetectMultiBackend(yolo_weights, device = device, dnn = False, data = yolo_classes_path, fp16 = half)
 stride, names, pt, onnx, engine = model.stride, model.names, model.pt, model.onnx, model.engine
 imgsz = check_img_size(imgsz, s = stride)  # check image size
