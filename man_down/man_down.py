@@ -5,7 +5,7 @@ from myutils.general import xyxy2xywh, scale_boxes
 
 class ManDown:
 
-    def __init__(self, ratio_thres = 1.0):
+    def __init__(self, ratio_thres):
 
         self.ratio_thres = ratio_thres
 

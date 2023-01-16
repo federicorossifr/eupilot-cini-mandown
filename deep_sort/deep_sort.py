@@ -26,21 +26,19 @@ class DeepSORT(object):
     def update(self, bbox_xywh, confidences, classes, ori_img, use_yolo_preds = True):
 
         self.height, self.width = ori_img.shape[:2]
-
-        classes = classes.cpu().numpy()
-        xywhs = bbox_xywh.cpu().numpy()
-        confs = confidences.cpu().numpy()
+        classes = classes.detach().numpy()
+        xywhs = bbox_xywh.detach().numpy()
+        confs = confidences.detach().numpy()
 
         # Get features with Re-Identification Model:
-        features = self._get_features(xywhs, ori_img).detach().cpu().numpy()
-        # bbox_tlwh = self._xywh_to_tlwh(bbox_xywh)
+        features = self._get_features(xywhs, ori_img).cpu().detach().numpy()  # send features to cpu and convert to NumPy array
         bbox_tlwh = self._xywh_to_tlwh(xywhs)
 
         detections = [Detection(bbox_tlwh[i], conf, features[i]) for i, conf in enumerate(confs)]
 
         # Run on non-maximum supression:
-        boxes = np.array([d.tlwh for d in detections])
-        scores = np.array([d.confidence for d in detections])
+        # boxes = np.array([d.tlwh for d in detections])
+        # scores = np.array([d.confidence for d in detections])
 
         # Predict and update tracks:
         self.tracker.predict()

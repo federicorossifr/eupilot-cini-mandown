@@ -136,9 +136,8 @@ class SaveData:
         nms_speed = dt[2]*1000  # NMS speed (in ms)
         man_down_speed = dt[3]*1000  # man down classifier speed (in ms)
         deep_sort_speed = dt[4]*1000  # DeepSORT algorithm speed (in ms)
-        total_speed = dt[5]*1000  # total algorithm speed (in ms)
 
-        speed_info = [pre_process_speed, inference_speed, nms_speed, man_down_speed, deep_sort_speed, total_speed]
+        speed_info = [pre_process_speed, inference_speed, nms_speed, man_down_speed, deep_sort_speed]
 
         return speed_info
 
@@ -152,7 +151,7 @@ class SaveData:
             if self.test_info == 0:
                 f.truncate(0)
                 self.test_info = 1
-            f.write(str(x1[0]) + ' ' + str(x1[1]) + ' ' + str(x1[2]) + ' ' + str(x1[3]) + ' ' + str(x1[4]) + ' ' + str(x1[5]))
+            f.write(str(x1[0]) + ' ' + str(x1[1]) + ' ' + str(x1[2]) + ' ' + str(x1[3]) + ' ' + str(x1[4]))
             if GPU_info is not None:
                 f.write(' ' + str(x2[0]) + ' ' + str(x2[1]) + ' ' + str(x2[2]) + ' ' + str(x2[3]) + ' ' + str(x2[4]))
             f.write('\n')

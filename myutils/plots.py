@@ -11,10 +11,9 @@ class Plots:
         # Define variables:
         self.pre_process_speed = []
         self.inference_speed = []
-        self.nms_speed = []
+        self.post_process_speed = []
         self.man_down_speed = []
         self.deep_sort_speed = []
-        self.total_speed = []
 
         self.GPU_memory_used = []
         self.GPU_utilization_rate = []
@@ -32,10 +31,9 @@ class Plots:
             s = s.split(' ')
             self.pre_process_speed.append(round(float(s[0]), 1))
             self.inference_speed.append(round(float(s[1]), 1))
-            self.nms_speed.append(round(float(s[2]), 1))
+            self.post_process_speed.append(round(float(s[2]), 1))
             self.man_down_speed.append(round(float(s[3]), 1))
             self.deep_sort_speed.append(round(float(s[4]), 1))
-            self.total_speed.append(round(float(s[5]), 1))
             self.GPU_memory_used.append(s[6])
             self.GPU_utilization_rate.append(s[7])
             self.mem_utilization_rate.append(s[8])
@@ -48,6 +46,7 @@ class Plots:
             self.x.append(i)
     
     ### PRE-PROCESS SPEED ###
+
     def pre_process_average_speed(self):
         # Compute average pre-process speed in milliseconds (ms)
         N = self.N
@@ -55,13 +54,12 @@ class Plots:
         average = round(np.divide(sum, N), 1)
 
         return average
+
     def pre_process_speed_plot(self):
 
         x = self.x
         y = self.pre_process_speed
-        # y[0] = self.pre_process_average_speed()
-        # y[1] = y[0]
-        plt.figure(num = 1)
+
         plt.plot(x, y)
         plt.grid(visible = True)
         plt.title('Pre-Process Speed')
@@ -69,7 +67,7 @@ class Plots:
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N)
         plt.ylim()
-        plt.show()
+        plt.savefig('Pre-Process Speed')
 
     ### INFERENCE SPEED ###
 
@@ -87,43 +85,46 @@ class Plots:
         y = self.inference_speed
         # y[0] = self.average_inference_speed()
         # y[1] = y[0]
-        plt.figure(num = 2)
+
         plt.plot(x, y)
         plt.grid(visible = True)
         plt.title('Inference Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N)
-        plt.ylim(0, max(y) + 100)
-        plt.show()
+        plt.ylim(0, max(y) + 40)
+        plt.savefig('Inference Speed')
 
-    ### NON-MAXIMUM SUPPRESSION SPEED ###
+    ### POST-PROCESS SPEED ###
 
-    def nms_average_speed(self):
-        # Compute average inference speed in milliseconds (ms)
+    def post_process_average_speed(self):
+        # Compute average post-process speed in milliseconds (ms)
         N = self.N
-        sum = np.sum(self.nms_speed)
+        sum = np.sum(self.post_process_speed)
         average = round(np.divide(sum, N), 1)
 
         return average
 
-    def nms_speed_plot(self):
+    def post_process_speed_plot(self):
 
         x = self.x
-        y = self.nms_speed
+        y = self.post_process_speed
         # y[0] = self.average_post_process_speed()
         # y[1] = y[0]
+
         plt.plot(x, y)
-        plt.grid()
-        plt.title('NMS Speed')
+        plt.grid(visible = True)
+        plt.title('Post-Process Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.show()
+        plt.xlim(0, self.N)
+        plt.ylim(0, max(y) + 5)
+        plt.savefig('Post-Process Speed')
 
     ### MANDOWN CLASSIFIER SPEED ###
 
     def man_down_average_speed(self):
-        # Compute average inference speed in milliseconds (ms)
+        # Compute average man down classifier speed in milliseconds (ms)
         N = self.N
         sum = np.sum(self.man_down_speed)
         average = round(np.divide(sum, N), 1)
@@ -135,17 +136,20 @@ class Plots:
         y = self.man_down_speed
         # y[0] = self.average_post_process_speed()
         # y[1] = y[0]
+
         plt.plot(x, y)
-        plt.grid()
-        plt.title('Man Down Speed')
+        plt.grid(visible = True)
+        plt.title('Man Down Classifier Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.show()
+        plt.xlim(0, self.N)
+        plt.ylim(-1, max(y) + 5)
+        plt.savefig('Man Down Classifier Speed')
 
     ### DEEP SORT ALGORITHM SPEED ###
 
     def deep_sort_average_speed(self):
-        # Compute average inference speed in milliseconds (ms)
+        # Compute average DeepSORT speed in milliseconds (ms)
         N = self.N
         sum = np.sum(self.deep_sort_speed)
         average = round(np.divide(sum, N), 1)
@@ -157,19 +161,27 @@ class Plots:
         y = self.deep_sort_speed
         # y[0] = self.average_post_process_speed()
         # y[1] = y[0]
+
         plt.plot(x, y)
-        plt.grid()
+        plt.grid(visible = True)
         plt.title('DeepSORT Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.show()
+        plt.xlim(0, self.N)
+        plt.ylim(0, max(y) + 10)
+        plt.savefig('DeepSORT Speed')
 
     ### ALGORITHM TOTAL SPEED ###
 
     def total_average_speed(self):
-        # Compute average inference speed in milliseconds (ms)
+        # Compute average total speed in milliseconds (ms)
         N = self.N
-        sum = np.sum(self.total_speed)
+        y = []
+        for i in range(0, self.N):
+            temp = (self.pre_process_speed[i] + self.inference_speed[i] + self.post_process_speed[i] 
+                + self.man_down_speed[i] + self.deep_sort_speed[i])
+            y = np.append(y, temp)
+        sum = np.sum(y)
         average = round(np.divide(sum, N), 1)
 
         return average
@@ -177,23 +189,36 @@ class Plots:
     def total_speed_plot(self):
 
         x = self.x
-        y = self.pre_process_speed + self.inference_speed + self.nms_speed + self.man_down_speed + self.deep_sort_speed
+        y = []
+        for i in range(0, self.N):
+            sum = (self.pre_process_speed[i] + self.inference_speed[i] + self.post_process_speed[i] 
+                + self.man_down_speed[i] + self.deep_sort_speed[i])
+            y = np.append(y, sum)
+
         plt.plot(x, y)
-        plt.grid()
+        plt.grid(visible = True)
         plt.title('Total Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.show()
+        plt.xlim(0, self.N)
+        plt.ylim(0, max(y) + 10)
+        plt.savefig('Total Speed')
 
     ### TOTAL ###
 
     def speed_plot(self):
 
+        self.total_speed = []
+        for i in range(0, self.N):
+            sum = (self.pre_process_speed[i] + self.inference_speed[i] + self.post_process_speed[i] 
+                + self.man_down_speed[i] + self.deep_sort_speed[i])
+            self.total_speed = np.append(self.total_speed, sum)
+
         plt.figure(num = 1)
         plt.plot(self.x, self.total_speed, label = 'Total')
         plt.plot(self.x, self.deep_sort_speed, label = 'DeepSORT')
         plt.plot(self.x, self.man_down_speed, label = 'Man Down Classifier')
-        plt.plot(self.x, self.nms_speed, label = 'Post-Process')
+        plt.plot(self.x, self.post_process_speed, label = 'Post-Process')
         plt.plot(self.x, self.inference_speed, label = 'YOLO Inference')
         plt.plot(self.x, self.pre_process_speed, label = 'Pre-Process')
         plt.grid()

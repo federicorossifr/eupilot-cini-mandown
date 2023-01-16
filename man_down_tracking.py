@@ -5,6 +5,7 @@ import sys
 import logging
 from pathlib import Path
 import argparse
+import numpy as np
 import cv2
 import torch
 
@@ -44,7 +45,7 @@ path/                            # directory
 # source = ROOT / 'sources/images/img7.jpg'
 source = ROOT / 'sources/videos/test1.mp4'
 # source = 1
-yolo_weights = WEIGHTS / 'yolov5x.pt'
+yolo_weights = WEIGHTS / 'yolov5x.engine'
 reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
 deep_sort_params_path = ROOT / 'configs/deep_sort.yaml'
 yolo_classes_path = ROOT / 'configs/coco.yaml'
@@ -62,7 +63,7 @@ exist_ok = False
 project = ROOT / 'results'
 name = 'test'
 line_thickness = 3  # bounding box thickness (pixels)
-half = False
+half = False  # float16
 dnn = False
 vid_stride = 1
 show_vid = False
@@ -126,8 +127,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Pre-Process Image:
     t1 = time_sync()
-    img = torch.from_numpy(img).to(device)
-    img = img.half() if half else img.float()  # uint8 to fp16/32
+    img = img.astype(np.float16) if half else img.astype(np.float32)  # uint8 to fp16/32
     img /= 255.0  # 0 - 255 to 0.0 - 1.0
     if len(img.shape) == 3:
         img = img[None]  # expand for batch dim
@@ -136,6 +136,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Inference:
     visualize = increment_path(save_dir / Path(path).stem, mkdir = True) if visualize else False
+    img = torch.from_numpy(img).to(device)
     t3 = time_sync()
     pred = model(img, augment = augment, visualize = visualize)
     t4 = time_sync()
@@ -143,6 +144,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Apply NMS:
     t5 = time_sync()
+    pred = pred.cpu()
     pred = non_max_suppression(pred, classes = yolo_classes_to_detect)
     t6 = time_sync()
     dt[2] = t6 - t5
@@ -163,9 +165,9 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
         annotator = Annotator(img0, line_width = line_thickness, example = str(names))
         w, h = img0.shape[1], img0.shape[0]
 
-        bboxes = det[:, :4]  # bounding boxes in xyxy form (torch tensor on device)
-        scores = det[:, 4]  # bounding boxes scores (torch tensor on device)
-        classesIDs = det[:, 5]  # bounding boxes classes IDs (torch tensor on device)
+        bboxes = det[:, :4]  # bounding boxes in xyxy form (torch tensor on cpu)
+        scores = det[:, 4]  # bounding boxes scores (torch tensor on cpu)
+        classesIDs = det[:, 5]  # bounding boxes classes IDs (torch tensor on cpu)
 
         # Pass Detections to Man Down Classifier:
         t7 = time_sync()
@@ -173,7 +175,6 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
         t8 = time_sync()
         dt[3] = t8 - t7
 
-        # if det is not None and len(det):
         if scores is not None and len(scores):
 
             # Print results:
@@ -183,7 +184,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
             # Pass Detections to Deep Sort Algorithm:
             t9 = time_sync()
-            outputs = deep_sort.update(bboxes.cpu(), scores.cpu(), classesIDs.cpu(), img0)
+            outputs = deep_sort.update(bboxes, scores, classesIDs, img0)
             t10 = time_sync()
             dt[4] = t10 - t9
 
@@ -229,9 +230,6 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
                 vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
             vid_writer.write(img0)
-    
-    t11 = time_sync()
-    dt[5] = t11 - t1
 
     # Save data:
     if save_data:
