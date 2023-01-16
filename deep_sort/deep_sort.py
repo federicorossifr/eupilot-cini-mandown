@@ -3,24 +3,23 @@
 import numpy as np
 import torch
 
-from utils_.loading import yaml_load
+from myutils.loading import yaml_load
 from deep_sort.nn_matching import NearestNeighborDistanceMetric
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from reid.reid_multibackend import ReIDDetectMultiBackend
 
-class DeepSort(object):
+class DeepSORT(object):
 
-    def __init__(self, model_weights, data = None, device = 'cpu', fp16 = None):
+    def __init__(self, reid_weights, parameters, device = 'cpu', fp16 = None):
 
-        parameters = yaml_load(data).get('parameters')
         max_cosine_distance = parameters.get('MAX_DIST')
         max_iou_distance = parameters.get('MAX_IOU_DISTANCE')
         max_age = parameters.get('MAX_AGE')
         n_init = parameters.get('N_INIT')
         nn_budget = parameters.get('NN_BUDGET')
 
-        self.model = ReIDDetectMultiBackend(weights = model_weights, device = device, fp16 = fp16)
+        self.model = ReIDDetectMultiBackend(weights = reid_weights, device = device, fp16 = fp16)
         metric = NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
         self.tracker = Tracker(metric, max_iou_distance = max_iou_distance, max_age = max_age, n_init = n_init)
 

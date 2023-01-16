@@ -2,6 +2,7 @@
 
 import os
 import sys
+import logging
 from pathlib import Path
 import argparse
 import cv2
@@ -14,8 +15,6 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 if str(ROOT / 'yolov5') not in sys.path:
     sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 to PATH
-if str(ROOT / 'reid') not in sys.path:
-    sys.path.append(str(ROOT / 'reid'))  # add reid to PATH
 if str(ROOT / 'deep_sort') not in sys.path:
     sys.path.append(str(ROOT / 'deep_sort'))  # add deep_sort to PATH
 if str(ROOT / 'man_down') not in sys.path:
@@ -23,11 +22,12 @@ if str(ROOT / 'man_down') not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from yolov5.models.common import DetectMultiBackend
-from utils_.general import non_max_suppression, time_sync, check_img_size, check_file, check_imshow, increment_path, select_device
-from utils_.loading import LoadImages, LoadStreams, yaml_load, IMG_FORMATS, VID_FORMATS
-from utils_.visualization import Annotator, colors, colorstr
-from utils_.memorization import SaveData
-from deep_sort.deep_sort import DeepSort
+from myutils.general import (non_max_suppression, time_sync, check_img_size, check_file, check_imshow, 
+                                increment_path, select_device)
+from myutils.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, yaml_load
+from myutils.visualization import Annotator, colors, colorstr
+from myutils.memorization import SaveData
+from deep_sort.deep_sort import DeepSORT
 from man_down.man_down import ManDown
 
 # Parameters:
@@ -41,31 +41,32 @@ path/                            # directory
 'https://youtu.be/Zgi9g1ksQHc'   # YouTube
 'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
 '''
-# source = ROOT / 'sources/images/img1.png'
-source = ROOT / 'sources/videos/vid1.mp4'
-yolo_weights = WEIGHTS / 'yolov5x.engine'
-reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.engine'
+# source = ROOT / 'sources/images/img7.jpg'
+source = ROOT / 'sources/videos/test1.mp4'
+# source = 1
+yolo_weights = WEIGHTS / 'yolov5x.pt'
+reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
+deep_sort_params_path = ROOT / 'configs/deep_sort.yaml'
 yolo_classes_path = ROOT / 'configs/coco.yaml'
-yolo_classes_to_detect = 0  # filter by class: --class 0, or --class 0 2 3
-deep_sort_parameters_path = ROOT / 'configs/deep_sort.yaml'
-ratio_thres = 1.0  # w/h ratio threshold for man down filter
+yolo_classes_to_detect = 0  # class person 0
+mandown_thres = 1.0  # w/h ratio threshold for man down classifier
 imgsz = (640, 640)
-conf_thres = 0.25  # confidence threshold
-iou_thres = 0.45  # NMS IOU threshold
-max_det = 1000  # maximum detections per image
 device = ''
 view_img = False
 save_txt = False  # save results to *.txt
 nosave = False  # do not save images/videos
 augment = False
 visualize = False
+update = False
+exist_ok = False
 project = ROOT / 'results'
 name = 'test'
 line_thickness = 3  # bounding box thickness (pixels)
 half = False
+dnn = False
 vid_stride = 1
-show_vid = False 
-save_vid = True 
+show_vid = False
+save_vid = False
 save_data = True
 
 # Get Source Type:
@@ -78,20 +79,21 @@ if is_url and is_file:
     source = check_file(source)  # download
 
 # Directories:
-save_dir = increment_path(Path(project) / name, exist_ok = False)  # increment run
+save_dir = increment_path(Path(project) / name, exist_ok = exist_ok)  # increment run
 (save_dir / 'labels' if save_txt else save_dir).mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector (YOLOv5):
 device = select_device(device)
-model = DetectMultiBackend(yolo_weights, device = device, dnn = False, data = yolo_classes_path, fp16 = half)
+model = DetectMultiBackend(yolo_weights, device = device, dnn = dnn, data = yolo_classes_path, fp16 = half)
 stride, names, pt, onnx, engine = model.stride, model.names, model.pt, model.onnx, model.engine
 imgsz = check_img_size(imgsz, s = stride)  # check image size
 
 # Load Man Down Filter:
-man_down = ManDown(ratio_thres = ratio_thres)
+man_down = ManDown(ratio_thres = mandown_thres)
 
 # Load Deep Sort Algorithm:
-deep_sort = DeepSort(reid_weights, data = deep_sort_parameters_path, device = device, fp16 = half)
+deep_sort_params = yaml_load(deep_sort_params_path).get('parameters')
+deep_sort = DeepSORT(reid_weights, parameters = deep_sort_params, device = device, fp16 = half)
 
 # Load Data Saver:
 data_saver = SaveData(save_dir, device)
@@ -119,7 +121,7 @@ def count_obj(box, w, h, id):
 # Run Algorithm:
 t_init = time_sync()
 model.warmup(imgsz = (1 if pt or model.triton else bs, 3, *imgsz))  # warmup
-seen, dt = 0, [0.0, 0.0, 0.0, 0.0, 0.0]
+seen, dt = 0, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Pre-Process Image:
@@ -141,7 +143,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
     # Apply NMS:
     t5 = time_sync()
-    pred = non_max_suppression(pred, conf_thres = conf_thres, iou_thres = iou_thres, classes = yolo_classes_to_detect, max_det = max_det)
+    pred = non_max_suppression(pred, classes = yolo_classes_to_detect)
     t6 = time_sync()
     dt[2] = t6 - t5
 
@@ -165,7 +167,7 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
         scores = det[:, 4]  # bounding boxes scores (torch tensor on device)
         classesIDs = det[:, 5]  # bounding boxes classes IDs (torch tensor on device)
 
-        # Pass Detections to Man Down Algorithm:
+        # Pass Detections to Man Down Classifier:
         t7 = time_sync()
         bboxes, scores, classesIDs = man_down.detection(img, img0, bboxes, scores, classesIDs)
         t8 = time_sync()
@@ -227,6 +229,9 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
 
                 vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
             vid_writer.write(img0)
+    
+    t11 = time_sync()
+    dt[5] = t11 - t1
 
     # Save data:
     if save_data:

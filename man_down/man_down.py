@@ -1,7 +1,7 @@
 '''Man Down Detector'''
 
 import torch
-from utils_.general import xyxy2xywh, scale_boxes
+from myutils.general import xyxy2xywh, scale_boxes
 
 class ManDown:
 
