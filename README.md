@@ -22,16 +22,18 @@ Formats accepted:
 
 ## Installation and usage
 
-In a work environment, clone and install the official YOLOv5 repository:
+In a work environment, clone and install the official YOLOv5 repository using the following commands:
 ```
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
 pip install -r requirements.txt  # install
 ```
 
-Then clone this repository with:
+Then, clone and install this repository using the following commands:
 ```
 git clone git@github.com:federicorossifr/eupilot-cini-mandown.git
+cd eupilot-cini-mandown
+pip install -r requirements.txt
 ```
 
 Execute code:
