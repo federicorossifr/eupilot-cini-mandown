@@ -45,7 +45,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 from yolov5.models.common import DetectMultiBackend
 from tools.general import time_sync, check_img_size, check_file, check_imshow, increment_path, select_device, non_max_suppression
 from tools.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, yaml_load
-from tools.visualization import Annotator, colors, colorstr
+from tools.visualization import Annotator, colors
 from tools.memorization import SaveData
 from deep_sort.deep_sort import DeepSORT
 from man_down.man_down import ManDown
@@ -74,7 +74,6 @@ visualize = False  # visualize features
 
 # Get Source Type:
 source = str(source)
-# save_img = not nosave and not source.endswith('.txt')  # save inference images
 is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
 is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
 webcam = source.isnumeric() or source.endswith('.streams') or (is_url and not is_file)
@@ -203,12 +202,6 @@ for path, img, img0s, vid_cap, s in dataset:
                 cv2.resizeWindow(str(p), img0.shape[1], img0.shape[0])
             cv2.imshow(str(p), img0)
             cv2.waitKey(1)  # 1 millisecond
-
-        # Show videos:
-        # if show_vid:
-        #     cv2.imshow(str(p), img0)
-        #     if cv2.waitKey(1) == ord('q'):  # q to quit
-        #         raise StopIteration
 
         # Save results (image with detections):
         if save_img:
