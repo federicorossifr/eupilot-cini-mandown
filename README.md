@@ -59,10 +59,10 @@ Weights:
 
 ***
 
-#### Ultralytics GitHub Repository
+#### Ultralytics YOLOv5 GitHub Official Repository
 https://github.com/ultralytics/yolov5
 
 ***
 
-#### DeepSORT Github Official Repository
+#### DeepSORT GitHub Official Repository
 https://github.com/nwojke/deep_sort
