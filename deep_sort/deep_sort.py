@@ -1,13 +1,12 @@
-'''Deep Sort Algorithm'''
+'''DeepSORT Algorithm'''
 
 import numpy as np
 import torch
 
-from myutils.loading import yaml_load
 from deep_sort.nn_matching import NearestNeighborDistanceMetric
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
-from reid.reid_multibackend import ReIDDetectMultiBackend
+from deep_sort.reid.reid_multibackend import ReIDDetectMultiBackend
 
 class DeepSORT(object):
 
@@ -23,18 +22,18 @@ class DeepSORT(object):
         metric = NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
         self.tracker = Tracker(metric, max_iou_distance = max_iou_distance, max_age = max_age, n_init = n_init)
 
-    def update(self, bbox_xywh, confidences, classes, ori_img, use_yolo_preds = True):
+    def update(self, img0, det, use_yolo_preds = True):
 
-        self.height, self.width = ori_img.shape[:2]
-        classes = classes.detach().numpy()
-        xywhs = bbox_xywh.detach().numpy()
-        confs = confidences.detach().numpy()
+        self.height, self.width = img0.shape[:2]
+        xywhs = det[:, :4]
+        scores = det[:, 4]
+        classes = det[:, 5]
 
         # Get features with Re-Identification Model:
-        features = self._get_features(xywhs, ori_img).cpu().detach().numpy()  # send features to cpu and convert to NumPy array
+        features = self._get_features(img0, xywhs)
         bbox_tlwh = self._xywh_to_tlwh(xywhs)
 
-        detections = [Detection(bbox_tlwh[i], conf, features[i]) for i, conf in enumerate(confs)]
+        detections = [Detection(bbox_tlwh[i], score, features[i]) for i, score in enumerate(scores)]
 
         # Run on non-maximum supression:
         # boxes = np.array([d.tlwh for d in detections])
@@ -50,14 +49,15 @@ class DeepSORT(object):
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue
             if use_yolo_preds:
-                det = track.get_yolo_pred()
-                x1, y1, x2, y2 = self._tlwh_to_xyxy(det.tlwh)
+                dets = track.get_yolo_pred()
+                x1, y1, x2, y2 = self._tlwh_to_xyxy(dets.tlwh)
             else:
                 box = track.to_tlwh()
                 x1, y1, x2, y2 = self._tlwh_to_xyxy(box)
             track_id = track.track_id
             class_id = track.class_id
             outputs.append(np.array([x1, y1, x2, y2, track_id, class_id], dtype = np.int))
+
         if len(outputs) > 0:
             outputs = np.stack(outputs, axis = 0)
 
@@ -115,14 +115,14 @@ class DeepSORT(object):
 
         return t, l, w, h
 
-    def _get_features(self, bbox_xywh, ori_img):
+    def _get_features(self, ori_img, bbox_xywh):
         im_crops = []
         for box in bbox_xywh:
             x1, y1, x2, y2 = self._xywh_to_xyxy(box)
             im = ori_img[y1:y2, x1:x2]
             im_crops.append(im)
         if im_crops:
-            features = self.model(im_crops)
+            features = self.model(im_crops).cpu().detach().numpy()
         else:
             features = np.array([])
 

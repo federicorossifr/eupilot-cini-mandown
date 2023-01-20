@@ -19,7 +19,7 @@ import pkg_resources as pkg
 import torch
 import torchvision
 
-from myutils.visualization import colorstr
+from tools.visualization import colorstr
 from subprocess import check_output
 
 FILE = Path(__file__).resolve() # current file path (man_down_tracking.py path)
@@ -129,7 +129,7 @@ def box_area(box):
     # box = xyxy(4,n)
     return (box[2] - box[0]) * (box[3] - box[1])
 
-def box_iou(box1, box2, eps = 1e-7):
+def box_iou(box1, box2, eps=1e-7):
     # https://github.com/pytorch/vision/blob/master/torchvision/ops/boxes.py
     """
     Return intersection-over-union (Jaccard index) of boxes.
@@ -192,7 +192,7 @@ def non_max_suppression(
 
     t = time.time()
     mi = 5 + nc  # mask start index
-    output = [torch.zeros((0, 6 + nm), device = prediction.device)] * bs
+    output = [torch.zeros((0, 6 + nm), device=prediction.device)] * bs
     for xi, x in enumerate(prediction):  # image index, image inference
         # Apply constraints
         # x[((x[..., 2:4] < min_wh) | (x[..., 2:4] > max_wh)).any(1), 4] = 0  # width-height
@@ -201,7 +201,7 @@ def non_max_suppression(
         # Cat apriori labels if autolabelling
         if labels and len(labels[xi]):
             lb = labels[xi]
-            v = torch.zeros((len(lb), nc + nm + 5), device = x.device)
+            v = torch.zeros((len(lb), nc + nm + 5), device=x.device)
             v[:, :4] = lb[:, 1:5]  # box
             v[:, 4] = 1.0  # conf
             v[range(len(lb)), lb[:, 0].long() + 5] = 1.0  # cls
@@ -228,8 +228,7 @@ def non_max_suppression(
 
         # Filter by class
         if classes is not None:
-            
-            x = x[(x[:, 5:6] == torch.tensor(classes, device = x.device)).any(1)]
+            x = x[(x[:, 5:6] == torch.tensor(classes, device=x.device)).any(1)]
 
         # Apply finite constraint
         # if not torch.isfinite(x).all():
@@ -240,9 +239,9 @@ def non_max_suppression(
         if not n:  # no boxes
             continue
         elif n > max_nms:  # excess boxes
-            x = x[x[:, 4].argsort(descending = True)[:max_nms]]  # sort by confidence
+            x = x[x[:, 4].argsort(descending=True)[:max_nms]]  # sort by confidence
         else:
-            x = x[x[:, 4].argsort(descending = True)]  # sort by confidence
+            x = x[x[:, 4].argsort(descending=True)]  # sort by confidence
 
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
@@ -374,7 +373,7 @@ def check_online():
 
     return run_once() or run_once()  # check twice to increase robustness to intermittent connectivity issues
 
-def check_requirements(requirements = ROOT / 'requirements.txt', exclude=(), install=True, cmds=''):
+def check_requirements(requirements=ROOT / 'requirements.txt', exclude=(), install=True, cmds=''):
     # Check installed dependencies meet YOLOv5 requirements (pass *.txt file or list of packages or single package str)
     prefix = colorstr('red', 'bold', 'requirements:')
     check_python()  # check python version

@@ -1,42 +1,31 @@
-'''Man Down Detector'''
+'''Man Down Classifier'''
 
-import torch
-from myutils.general import xyxy2xywh, scale_boxes
+import numpy as np
+from tools.general import xyxy2xywh, scale_boxes
 
 class ManDown:
 
-    def __init__(self, ratio_thres):
+    def __init__(self, ratio_thres, fp16 = False):
 
         self.ratio_thres = ratio_thres
+        self.fp16 = fp16
 
-    def detection(self, img, img0, bboxes, scores, classesIDs):
-        
-        if len(scores) != 0:
-            bboxes = scale_boxes(img.shape[2:], bboxes, img0.shape).round()
-            bboxes = xyxy2xywh(bboxes)
-            new_bboxes, new_scores, new_classesIDs = [], [], []
+    def classify(self, img, img0, det):
 
-            for i in range(0, len(scores)):
-                w = bboxes[i][2]
-                h = bboxes[i][3]
-                if w/h > self.ratio_thres:
-                    new_bboxes.append(bboxes[i])
-                    new_scores.append(scores[i])
-                    new_classesIDs.append(classesIDs[i])
+        xyxys = det[:, :4].detach().numpy()  # bounding boxes in xyxy form (NumPy array on CPU)
+        scores = det[:, 4].detach().numpy()  # scores (NumPy array on CPU)
+        classes = det[:, 5].detach().numpy()  # classes IDs (NumPy array on CPU)
+        xyxys = scale_boxes(img.shape[2:], xyxys, img0.shape).round()  # rescale boxes to the original image shape
+        xywhs = xyxy2xywh(xyxys)  # convert bounding boxes from xyxy to xywh form
+        output = []
 
-            if len(new_scores) != 0:
-                new_bboxes = torch.stack(new_bboxes, dim = 0)
-                new_scores = torch.stack(new_scores, dim = 0)
-                new_classesIDs = torch.stack(new_classesIDs, dim = 0)
-            
-            else:
-                new_bboxes = torch.empty(0)
-                new_scores = torch.empty(0)
-                new_classesIDs = torch.empty(0)
-        
-        else:
-            new_bboxes = torch.empty(0)
-            new_scores = torch.empty(0)
-            new_classesIDs = torch.empty(0)
+        for i in range(0, len(det)):
+            w = xywhs[i][2]
+            h = xywhs[i][3]
+            if w/h > self.ratio_thres:
+                output.append([xywhs[i][0], xywhs[i][1], xywhs[i][2], xywhs[i][3], scores[i], classes[i]])
 
-        return new_bboxes, new_scores, new_classesIDs
+        output = np.array(output)
+        output = np.ndarray.astype(output, dtype = np.half) if self.fp16 else np.ndarray.astype(output, dtype = np.float32)
+
+        return output if len(output) else np.empty(0)

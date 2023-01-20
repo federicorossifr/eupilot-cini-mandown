@@ -1,10 +1,30 @@
-''' Man Down Tracking'''
+"""
+Man Down Tracking
+
+Run man down tracking algorithm on videos, YouTube, webcam, streams, etc.
+
+Sources:
+
+    0, 1, 2, ...                     # webcam
+    img.jpg                          # image
+    vid.mp4                          # video
+    path/                            # directory
+    'path/*.jpg'                     # glob
+    'https://youtu.be/Zgi9g1ksQHc'   # YouTube
+    'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
+
+Weights:
+
+    yolov5s.pt                 # PyTorch
+    yolov5s.onnx               # ONNX Runtime
+    yolov5s.engine             # TensorRT
+
+"""
 
 import os
 import sys
-import logging
+import platform
 from pathlib import Path
-import argparse
 import numpy as np
 import cv2
 import torch
@@ -23,76 +43,59 @@ if str(ROOT / 'man_down') not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from yolov5.models.common import DetectMultiBackend
-from myutils.general import (non_max_suppression, time_sync, check_img_size, check_file, check_imshow, 
-                                increment_path, select_device)
-from myutils.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, yaml_load
-from myutils.visualization import Annotator, colors, colorstr
-from myutils.memorization import SaveData
+from tools.general import time_sync, check_img_size, check_file, check_imshow, increment_path, select_device, non_max_suppression
+from tools.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, yaml_load
+from tools.visualization import Annotator, colors, colorstr
+from tools.memorization import SaveData
 from deep_sort.deep_sort import DeepSORT
 from man_down.man_down import ManDown
 
 # Parameters:
-'''
-Source:
-0, 1, 2, ...                     # webcam
-img.jpg                          # image
-vid.mp4                          # video
-path/                            # directory
-'path/*.jpg'                     # glob
-'https://youtu.be/Zgi9g1ksQHc'   # YouTube
-'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
-'''
-# source = ROOT / 'sources/images/img7.jpg'
-source = ROOT / 'sources/videos/test1.mp4'
-# source = 1
-yolo_weights = WEIGHTS / 'yolov5x.engine'
-reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'
-deep_sort_params_path = ROOT / 'configs/deep_sort.yaml'
-yolo_classes_path = ROOT / 'configs/coco.yaml'
-yolo_classes_to_detect = 0  # class person 0
-mandown_thres = 1.0  # w/h ratio threshold for man down classifier
-imgsz = (640, 640)
-device = ''
-view_img = False
-save_txt = False  # save results to *.txt
-nosave = False  # do not save images/videos
-augment = False
-visualize = False
-update = False
-exist_ok = False
-project = ROOT / 'results'
-name = 'test'
+source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
+yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
+reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'  # ReID model path
+deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
+classes_path = ROOT / 'data/coco.yaml'  # dataset.yaml path
+classes_to_detect = 0  # filter by class: 0 or 0, 1, 2, 3
+mandown_thres = 1.0  # man down classifier aspect ratio threshold
+imgsz = (640, 640)  # inference image size (height, width)
+device = ''  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+project = ROOT / 'results'  # save results to project/name
+name = 'test'  # save results to project/name
 line_thickness = 3  # bounding box thickness (pixels)
-half = False  # float16
-dnn = False
-vid_stride = 1
-show_vid = False
-save_vid = False
-save_data = True
+half = False  # use FP16 half-precision inference
+vid_stride = 1  # video frame-rate stride
+view_img = False  # show results
+save_img = True  # save images
+save_txt = False  # save data to *.txt
+exist_ok = False  # existing project/name ok, do not increment
+augment = False  # augmented inference
+visualize = False  # visualize features
 
 # Get Source Type:
 source = str(source)
-save_img = not nosave and not source.endswith('.txt')  # save inference images
+# save_img = not nosave and not source.endswith('.txt')  # save inference images
 is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
 is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
-webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
+webcam = source.isnumeric() or source.endswith('.streams') or (is_url and not is_file)
 if is_url and is_file:
     source = check_file(source)  # download
 
 # Directories:
 save_dir = increment_path(Path(project) / name, exist_ok = exist_ok)  # increment run
-(save_dir / 'labels' if save_txt else save_dir).mkdir(parents = True, exist_ok = True)  # make dir
+save_dir.mkdir(parents = True, exist_ok = True)  # make dir
 
-# Load Object Detector (YOLOv5):
+# Load Object Detector:
 device = select_device(device)
-model = DetectMultiBackend(yolo_weights, device = device, dnn = dnn, data = yolo_classes_path, fp16 = half)
-stride, names, pt, onnx, engine = model.stride, model.names, model.pt, model.onnx, model.engine
+model = DetectMultiBackend(yolo_weights, device = device, data = classes_path, fp16 = half)
+stride, names = model.stride, model.names
+pt, onnx, engine = model.pt, model.onnx, model.engine
 imgsz = check_img_size(imgsz, s = stride)  # check image size
 
-# Load Man Down Filter:
-man_down = ManDown(ratio_thres = mandown_thres)
+# Load Man Down Classifier:
+man_down = ManDown(ratio_thres = mandown_thres, fp16 = half)
 
-# Load Deep Sort Algorithm:
+# Load Object Tracker:
 deep_sort_params = yaml_load(deep_sort_params_path).get('parameters')
 deep_sort = DeepSORT(reid_weights, parameters = deep_sort_params, device = device, fp16 = half)
 
@@ -109,114 +112,106 @@ else:
     dataset = LoadImages(source, img_size = imgsz, stride = stride, auto = pt, vid_stride = vid_stride)
 vid_path, vid_writer = [None] * bs, [None] * bs
 
-count = 0
-data = []
-def count_obj(box, w, h, id):
-    global count, data
-    center_coordinates = (int(box[0] + (box[2] - box[0])/2) , int(box[1]+(box[3] - box[1])/2))
-    if int(box[1] + (box[3] - box[1])/2) > (h - 350):
-        if  id not in data:
-            count += 1
-            data.append(id)
-
 # Run Algorithm:
-t_init = time_sync()
 model.warmup(imgsz = (1 if pt or model.triton else bs, 3, *imgsz))  # warmup
-seen, dt = 0, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
-
+seen, windows, dt = 0, [], [0.0, 0.0, 0.0, 0.0, 0.0]
+t_init = time_sync()
+for path, img, img0s, vid_cap, s in dataset:
     # Pre-Process Image:
     t1 = time_sync()
-    img = img.astype(np.float16) if half else img.astype(np.float32)  # uint8 to fp16/32
-    img /= 255.0  # 0 - 255 to 0.0 - 1.0
+    img = np.ndarray.astype(img, dtype = np.half) if half else np.ndarray.astype(img, dtype = np.float32)  # uint8 to fp16/32
+    # img = img.half() if model.fp16 else img.float()  # uint8 to fp16/32
+    img /= 255  # 0 - 255 to 0.0 - 1.0
     if len(img.shape) == 3:
         img = img[None]  # expand for batch dim
     t2 = time_sync()
-    dt[0] = t2 - t1
+    dt[0] = t2 - t1  # pre-process speed
 
     # Inference:
-    visualize = increment_path(save_dir / Path(path).stem, mkdir = True) if visualize else False
-    img = torch.from_numpy(img).to(device)
     t3 = time_sync()
+    visualize = increment_path(save_dir / Path(path).stem, mkdir = True) if visualize else False
+    img = torch.from_numpy(img).to(model.device)
     pred = model(img, augment = augment, visualize = visualize)
     t4 = time_sync()
-    dt[1] = t4 - t3
+    dt[1] = t4 - t3  # inference speed
 
     # Apply NMS:
     t5 = time_sync()
-    pred = pred.cpu()
-    pred = non_max_suppression(pred, classes = yolo_classes_to_detect)
+    pred = pred[0].cpu() if pt else pred.cpu()
+    pred = non_max_suppression(pred, conf_thres = 0.25, iou_thres = 0.45, classes = classes_to_detect, max_det = 1000)
     t6 = time_sync()
-    dt[2] = t6 - t5
+    dt[2] = t6 - t5  # post-process speed
 
-    # Process Detections:
-    for i, det in enumerate(pred):  # detections per image
-
+    # Process Predictions:
+    for i, det in enumerate(pred):  # per image
         seen += 1
         if webcam:  # batch_size >= 1
-            p, img0, _ = path[i], img0s[i].copy(), dataset.count
-            s += f'webcam {i}: '
+            p, img0, frame = path[i], img0s[i].copy(), dataset.count
+            s += f'{i}: '
         else:
-            p, img0, _ = path, img0s.copy(), getattr(dataset, 'frame', 0)
+            p, img0, frame = path, img0s.copy(), getattr(dataset, 'frame', 0)
 
         p = Path(p)  # to Path
         save_path = str(save_dir / p.name)  # img.jpg, vid.mp4, ...
+        txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
         s += '%gx%g ' % img.shape[2:]  # print string
         annotator = Annotator(img0, line_width = line_thickness, example = str(names))
-        w, h = img0.shape[1], img0.shape[0]
 
-        bboxes = det[:, :4]  # bounding boxes in xyxy form (torch tensor on cpu)
-        scores = det[:, 4]  # bounding boxes scores (torch tensor on cpu)
-        classesIDs = det[:, 5]  # bounding boxes classes IDs (torch tensor on cpu)
+        if len(det):
+            
+            # Pass Detections to the Man Down Classifier:
+            t7 = time_sync()
+            md_det = man_down.classify(img, img0, det)
+            t8 = time_sync()
+            dt[3] = t8 - t7  # man down classifier speed
 
-        # Pass Detections to Man Down Classifier:
-        t7 = time_sync()
-        bboxes, scores, classesIDs = man_down.detection(img, img0, bboxes, scores, classesIDs)
-        t8 = time_sync()
-        dt[3] = t8 - t7
+            if len(md_det):
 
-        if scores is not None and len(scores):
+                # Print results
+                for c in np.unique(md_det[:, 5]):
+                    n = int(np.sum(md_det[:, 5] == c))  # detections per class
+                    s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
-            # Print results:
-            for c in det[:, -1].unique():
-                n = (det[:, -1] == c).sum()  # detections per class
-                s += f"{n} {names[int(c)]}{'s' * (n > 1)} "  # add to string
+                # Pass Detections to the DeepSORT algorithm:
+                t9 = time_sync()
+                outputs = deep_sort.update(img0, md_det)
+                t10 = time_sync()
+                dt[4] = t10 - t9  # deepSORT speed
 
-            # Pass Detections to Deep Sort Algorithm:
-            t9 = time_sync()
-            outputs = deep_sort.update(bboxes, scores, classesIDs, img0)
-            t10 = time_sync()
-            dt[4] = t10 - t9
-
-            # Draw bounding boxes for visualization:
-            if len(outputs) > 0:
-                for j, (output, conf) in enumerate(zip(outputs, scores)):
-
-                    bboxes = output[0:4]  # bounding boxes in xyxy form
-                    id = output[4]  # object number 
-                    classesIDs = output[5]  # object class
-                    count_obj(bboxes, w, h, id)
-                    c = int(classesIDs)  # integer class
-                    if c == 0:
-                        md = 'man down'
-                        label = f'{id} {md} {conf:.2f}'
-                    else:
-                        label = f'{id} {names[c]} {conf:.2f}'
-                    annotator.box_label(bboxes, label, color = colors(c, True))
-
+                # Draw bounding boxes for visualization:
+                if len(outputs):
+                    scores = md_det[:, 4]
+                    for j, (output, score) in enumerate(zip(outputs, scores)):
+                        xyxy = output[0:4]  # bounding box in xyxy form
+                        id = output[4]  # object number 
+                        class_id = output[5]  # object class
+                        c = int(class_id)  # integer class
+                        if c == 0:
+                            md = 'man down'
+                            label = f'{id} {md} {score:.2f}'
+                        else:
+                            label = f'{id} {names[c]} {score:.2f}'
+                        annotator.box_label(xyxy, label, color = colors(c, True))
         else:
-            deep_sort.increment_ages()
+            pass
 
         img0 = annotator.result()
+        if view_img:
+            if platform.system() == 'Linux' and p not in windows:
+                windows.append(p)
+                cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
+                cv2.resizeWindow(str(p), img0.shape[1], img0.shape[0])
+            cv2.imshow(str(p), img0)
+            cv2.waitKey(1)  # 1 millisecond
 
         # Show videos:
-        if show_vid:
-            cv2.imshow(str(p), img0)
-            if cv2.waitKey(1) == ord('q'):  # q to quit
-                raise StopIteration
+        # if show_vid:
+        #     cv2.imshow(str(p), img0)
+        #     if cv2.waitKey(1) == ord('q'):  # q to quit
+        #         raise StopIteration
 
         # Save results (image with detections):
-        if save_vid:
+        if save_img:
             if vid_path != save_path:  # new video
                 vid_path = save_path
                 if isinstance(vid_writer, cv2.VideoWriter):
@@ -232,15 +227,16 @@ for frame_idx, (path, img, img0s, vid_cap, s) in enumerate(dataset):
             vid_writer.write(img0)
 
     # Save data:
-    if save_data:
+    if save_txt:
         speed_info = data_saver.get_speed_info(dt)
         if str(device) != 'cpu':
             GPU_info = data_saver.get_GPU_info()
             data_saver.save(speed_info, GPU_info)
         else:
             data_saver.save(speed_info)  # only speed info
+
     print(f"{s}")
-    print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for NMS, {dt[3]*1000:.1f} ms for Man Down, {dt[4]*1000:.1f} ms for Deep Sort')
+    print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for post-process, {dt[3]*1000:.1f} ms for Man Down, {dt[4]*1000:.1f} ms for DeepSORT')
 
 t_final = time_sync()
 
@@ -249,5 +245,5 @@ FPS = seen/(t_final - t_init)
 print("FPS: ", FPS)
 
 # Save results:
-if save_data or save_vid:
+if save_txt or save_img:
     print('Results saved to %s' % save_path)

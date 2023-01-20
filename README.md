@@ -20,6 +20,43 @@ Formats accepted:
 
 ***
 
+## Installation and usage
+
+In a work environment, clone and install the official YOLOv5 repository:
+```
+git clone https://github.com/ultralytics/yolov5  # clone
+cd yolov5
+pip install -r requirements.txt  # install
+```
+
+Then clone this repository with:
+```
+git clone git@github.com:federicorossifr/eupilot-cini-mandown.git
+```
+
+Execute code:
+```
+python man_down_tracking.py
+```
+
+Sources:
+
+    0, 1, 2, ...                     # webcam
+    img.jpg                          # image
+    vid.mp4                          # video
+    path/                            # directory
+    'path/*.jpg'                     # glob
+    'https://youtu.be/Zgi9g1ksQHc'   # YouTube
+    'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
+
+Weights:
+
+    yolov5s.pt                 # PyTorch
+    yolov5s.onnx               # ONNX Runtime
+    yolov5s.engine             # TensorRT
+
+***
+
 #### Ultralytics GitHub Repository
 https://github.com/ultralytics/yolov5
 

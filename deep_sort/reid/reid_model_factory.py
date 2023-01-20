@@ -102,9 +102,11 @@ __trained_urls = {
     'https://drive.google.com/uc?id=1SigwBE6mPdqiJMqhuIY4aqC7--5CsMal',
 }
 
+
 def show_downloadeable_models():
     print('\nAvailable .pt ReID models for automatic download')
     print(list(__trained_urls.keys()))
+
 
 def get_model_url(model):
     if model.name in __trained_urls:
@@ -112,17 +114,20 @@ def get_model_url(model):
     else:
         None
 
+
 def is_model_in_model_types(model):
     if model.name in __model_types:
         return True
     else:
         return False
 
+
 def get_model_name(model):
     for x in __model_types:
         if x in model.name:
             return x
     return None
+
 
 def download_url(url, dst):
     """Downloads file from a url to a destination.
@@ -152,6 +157,7 @@ def download_url(url, dst):
 
     urllib.request.urlretrieve(url, dst, _reporthook)
     sys.stdout.write('\n')
+
 
 def load_pretrained_weights(model, weight_path):
     r"""Loads pretrianed weights to model.
@@ -209,3 +215,4 @@ def load_pretrained_weights(model, weight_path):
                 'due to unmatched keys or layer size: {}'.
                 format(discarded_layers)
             )
+

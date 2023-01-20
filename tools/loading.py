@@ -2,10 +2,10 @@
 
 import os
 import glob
-import yaml
 from pathlib import Path
 import time
 import math
+import yaml
 from threading import Thread
 from urllib.parse import urlparse
 
@@ -13,7 +13,7 @@ import cv2
 import numpy as np
 import torch
 
-from myutils.general import LOGGER, is_colab, is_kaggle, clean_str, check_requirements
+from tools.general import LOGGER, is_colab, is_kaggle, clean_str, check_requirements
 
 IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm'  # include image suffixes
 VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
