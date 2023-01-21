@@ -54,7 +54,7 @@ Sources:
 Weights:
 
     yolov5s.pt                 # PyTorch
-    yolov5s.onnx               # ONNX Runtime
+    yolov5s.onnx               # ONNX
     yolov5s.engine             # TensorRT
 
 ***
