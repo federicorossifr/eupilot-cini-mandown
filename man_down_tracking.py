@@ -43,16 +43,16 @@ if str(ROOT / 'man_down') not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from yolov5.models.common import DetectMultiBackend
-from tools.general import time_sync, check_img_size, check_file, check_imshow, increment_path, select_device, non_max_suppression
-from tools.loading import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, yaml_load
-from tools.visualization import Annotator, colors
-from tools.memorization import SaveData
 from deep_sort.deep_sort import DeepSORT
 from man_down.man_down import ManDown
+from tools.general import (Annotator, colors, time_sync, check_img_size, check_file, check_imshow, 
+                            increment_path, select_device, non_max_suppression)
+from tools.load import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, load_yaml
+from tools.save import SaveData
 
 # Parameters:
 source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
-yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
+yolo_weights = WEIGHTS / 'yolov5x.engine'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
 classes_path = ROOT / 'data/coco.yaml'  # dataset.yaml path
@@ -67,7 +67,7 @@ half = False  # use FP16 half-precision inference
 vid_stride = 1  # video frame-rate stride
 view_img = False  # show results
 save_img = True  # save images
-save_txt = False  # save data to *.txt
+save_txt = True  # save data to *.txt
 exist_ok = False  # existing project/name ok, do not increment
 augment = False  # augmented inference
 visualize = False  # visualize features
@@ -95,11 +95,11 @@ imgsz = check_img_size(imgsz, s = stride)  # check image size
 man_down = ManDown(ratio_thres = mandown_thres, fp16 = half)
 
 # Load Object Tracker:
-deep_sort_params = yaml_load(deep_sort_params_path).get('parameters')
+deep_sort_params = load_yaml(deep_sort_params_path).get('parameters')
 deep_sort = DeepSORT(reid_weights, parameters = deep_sort_params, device = device, fp16 = half)
 
 # Load Data Saver:
-data_saver = SaveData(save_dir, device)
+data_logger = SaveData(save_dir, device)
 
 # Dataloader:
 bs = 1  # batch_size
@@ -221,15 +221,15 @@ for path, img, img0s, vid_cap, s in dataset:
 
     # Save data:
     if save_txt:
-        speed_info = data_saver.get_speed_info(dt)
+        speed_info = data_logger.get_speed_informations(dt)
         if str(device) != 'cpu':
-            GPU_info = data_saver.get_GPU_info()
-            data_saver.save(speed_info, GPU_info)
+            GPU_info = data_logger.get_GPU_informations()
+            data_logger.save(speed_info, GPU_info)  # speed info and GPU info if available
         else:
-            data_saver.save(speed_info)  # only speed info
+            data_logger.save(speed_info)  # only speed info if GPU isn't available
 
     print(f"{s}")
-    print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for post-process, {dt[3]*1000:.1f} ms for Man Down, {dt[4]*1000:.1f} ms for DeepSORT')
+    print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for post-process, {dt[3]*1000:.1f} ms for man down, {dt[4]*1000:.1f} ms for DeepSORT')
 
 t_final = time_sync()
 

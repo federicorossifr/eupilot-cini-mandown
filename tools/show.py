@@ -1,4 +1,3 @@
-'''Plots Utils'''
 
 import numpy as np
 import matplotlib as mpl
@@ -14,7 +13,6 @@ class Plots:
         self.post_process_speed = []
         self.man_down_speed = []
         self.deep_sort_speed = []
-
         self.GPU_memory_used = []
         self.GPU_utilization_rate = []
         self.mem_utilization_rate = []
@@ -34,11 +32,10 @@ class Plots:
             self.post_process_speed.append(round(float(s[2]), 1))
             self.man_down_speed.append(round(float(s[3]), 1))
             self.deep_sort_speed.append(round(float(s[4]), 1))
-            self.GPU_memory_used.append(s[6])
-            self.GPU_utilization_rate.append(s[7])
-            self.mem_utilization_rate.append(s[8])
-            self.GPU_temperature.append(float(s[9]))
-            self.GPU_power_consumption.append(float(s[10]))
+            self.GPU_memory_used.append(s[5])
+            self.GPU_utilization_rate.append(s[6])
+            self.GPU_temperature.append(float(s[7]))
+            self.GPU_power_consumption.append(float(s[8]))
 
         # Define number of frames:
         self.x = []
