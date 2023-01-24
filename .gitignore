@@ -1,8 +1,10 @@
+# videos and images
+benchmark.png
 
 # files
-comparison.png
 man_down_classifier.py
 test.py
+benchmark.py
 
 # folders
 __pycache__

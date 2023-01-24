@@ -60,7 +60,7 @@ Weights:
 ***
 ## Benchmark
 
-![comparison.png](comparison.png)
+![benchmark.png](benchmark.png)
 
 ***
 
