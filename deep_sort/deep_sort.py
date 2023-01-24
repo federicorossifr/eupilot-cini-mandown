@@ -17,10 +17,11 @@ class DeepSORT(object):
         max_age = parameters.get('MAX_AGE')
         n_init = parameters.get('N_INIT')
         nn_budget = parameters.get('NN_BUDGET')
+        lambda_weight = parameters.get('LAMBDA')
 
         self.model = ReIDDetectMultiBackend(weights = reid_weights, device = device, fp16 = fp16)
         metric = NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
-        self.tracker = Tracker(metric, max_iou_distance = max_iou_distance, max_age = max_age, n_init = n_init)
+        self.tracker = Tracker(metric, max_iou_distance = max_iou_distance, max_age = max_age, n_init = n_init, lambda_weight = lambda_weight)
 
     def update(self, img0, det, use_yolo_preds = True):
 

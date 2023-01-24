@@ -16,7 +16,7 @@ Sources:
 Weights:
 
     yolov5s.pt                 # PyTorch
-    yolov5s.onnx               # ONNX Runtime
+    yolov5s.onnx               # ONNX
     yolov5s.engine             # TensorRT
 
 """
@@ -66,7 +66,7 @@ line_thickness = 3  # bounding box thickness (pixels)
 half = False  # use FP16 half-precision inference
 vid_stride = 1  # video frame-rate stride
 view_img = False  # show results
-save_img = True  # save images
+save_img = False  # save images
 save_txt = True  # save data to *.txt
 exist_ok = False  # existing project/name ok, do not increment
 augment = False  # augmented inference

@@ -36,13 +36,13 @@ class Tracker:
     """
     GATING_THRESHOLD = np.sqrt(kalman_filter.chi2inv95[4])
 
-    def __init__(self, metric, max_iou_distance = 0.9, max_age = 30, n_init = 3, _lambda = 0):
+    def __init__(self, metric, max_iou_distance = 0.9, max_age = 30, n_init = 3, lambda_weight = 0):
 
         self.metric = metric
         self.max_iou_distance = max_iou_distance
         self.max_age = max_age
         self.n_init = n_init
-        self._lambda = _lambda
+        self.lambda_weight = lambda_weight
         self.kf = kalman_filter.KalmanFilter()
         self.tracks = []
         self._next_id = 1
@@ -127,7 +127,7 @@ class Tracker:
         app_gate = app_cost > self.metric.matching_threshold
 
         # Combine the two cost matrices and threshold:
-        cost_matrix = self._lambda * pos_cost + (1 - self._lambda) * app_cost
+        cost_matrix = self.lambda_weight * pos_cost + (1 - self.lambda_weight) * app_cost
         cost_matrix[np.logical_or(pos_gate, app_gate)] = linear_assignment.INF_COST
 
         return cost_matrix

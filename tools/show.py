@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 class Plots:
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, device):
 
         # Define variables:
         self.pre_process_speed = []
@@ -15,7 +15,6 @@ class Plots:
         self.deep_sort_speed = []
         self.GPU_memory_used = []
         self.GPU_utilization_rate = []
-        self.mem_utilization_rate = []
         self.GPU_temperature = []
         self.GPU_power_consumption = []
 
@@ -32,10 +31,11 @@ class Plots:
             self.post_process_speed.append(round(float(s[2]), 1))
             self.man_down_speed.append(round(float(s[3]), 1))
             self.deep_sort_speed.append(round(float(s[4]), 1))
-            self.GPU_memory_used.append(s[5])
-            self.GPU_utilization_rate.append(s[6])
-            self.GPU_temperature.append(float(s[7]))
-            self.GPU_power_consumption.append(float(s[8]))
+            if device != 'cpu':
+                self.GPU_memory_used.append(s[5])
+                self.GPU_utilization_rate.append(s[6])
+                self.GPU_temperature.append(float(s[7]))
+                self.GPU_power_consumption.append(float(s[8]))
 
         # Define number of frames:
         self.x = []
@@ -223,8 +223,8 @@ class Plots:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N)
-        plt.ylim(-10, max(self.total_speed) + 30)
-        plt.legend()
+        plt.ylim(-5, max(self.total_speed) + 10)
+        # plt.legend()
         plt.savefig('Speed')
 
     ### GPU TEMPERATURE ###

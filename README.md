@@ -54,8 +54,15 @@ Sources:
 Weights:
 
     yolov5s.pt                 # PyTorch
-    yolov5s.onnx               # ONNX
+    yolov5s.onnx               # ONNX Runtime
     yolov5s.engine             # TensorRT
+
+***
+## Benchmark
+
+<div align = "center">
+    <img src = "/home/ubuntu/eupilot-cini-mandown/comparison.png"  width = "80%" height = "80%">
+</div>
 
 ***
 

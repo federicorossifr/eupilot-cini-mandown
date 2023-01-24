@@ -144,7 +144,7 @@ class SaveData:
         if GPU_info is not None:
             self.GPU_info = GPU_info
 
-        with open(self.save_dir / 'data.txt', 'a') as f:
+        with open(self.save_dir / 'info.txt', 'a') as f:
             if self.test_info:
                 f.truncate(0)
                 self.test_info = False
