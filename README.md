@@ -60,9 +60,7 @@ Weights:
 ***
 ## Benchmark
 
-<div align = "center">
-    <img src = "/home/ubuntu/eupilot-cini-mandown/comparison.png"  width = "80%" height = "80%">
-</div>
+![comparison.png](comparison.png)
 
 ***
 
