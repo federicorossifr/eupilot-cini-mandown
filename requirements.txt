@@ -1,23 +1,19 @@
 # Man Down tracking requirements
 # Usage: pip install -r requirements.txt
 
-gdown==4.6.0
-jedi==0.17.2
-pafy==0.5.5
+gdown>=4.6.0
+jedi>=0.17.2
 protobuf==3.19.6
 
-# NVIDIA GPUs analysis
-pynvml==11.4.1
-
 # TensorRT Inference
-tensorrt==8.2.5.1
+tensorrt
 
 # ONNX Inference
-onnx-graphsurgeon==0.3.12
-onnx-simplifier==0.4.10
-onnxoptimizer==0.2.7
-onnx>=1.12.0
-onnxruntime-gpu>=1.12.0
+onnx
+onnxruntime-gpu
+onnx-simplifier
+onnx-graphsurgeon
+onnxoptimizer
 
-# Plotting
-matplotlib3==3.34
+# NVIDIA GPUs analysis
+pynvml>=11.4.1
