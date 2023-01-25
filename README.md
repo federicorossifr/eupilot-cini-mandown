@@ -58,7 +58,7 @@ Weights:
     yolov5s.engine             # TensorRT
 
 ***
-## Benchmark
+## Benchmarks
 
 ![benchmark.png](benchmark.png)
 
