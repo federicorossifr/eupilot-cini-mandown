@@ -22,7 +22,7 @@ Formats accepted:
 
 ## Installation and usage
 
-In a work environment, clone and install the official YOLOv5 repository using the following commands:
+In a work environment with Python>=3.7 and torch installed, clone and install the official YOLOv5 repository using the following commands:
 ```
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
@@ -58,7 +58,7 @@ Weights:
     yolov5s.engine             # TensorRT
 
 ***
-## Benchmarks
+## Benchmark
 
 ![benchmark.png](benchmark.png)
 

@@ -3,6 +3,10 @@ import time
 import math
 import pynvml
 
+def get_CPU_informations():
+
+    print("No info")
+
 def get_GPU_informations():
 
     pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
@@ -89,16 +93,22 @@ def get_GPU_informations():
 
         print(" ")
 
-class SaveData:
+class SaveInfo:
 
     def __init__(self, save_dir, device = 'cpu'):
 
-        self.test_info = True
+        self.write_info = True
         self.save_dir = save_dir
+        self.device = device
 
-        if str(device) != 'cpu':
+        if str(self.device) is 'cpu':
 
-            print("NVIDIA GPU found, run NVIDIA management library...")
+            print("No NVIDIA GPU found, get CPU informations...")
+
+
+        else:
+
+            print("NVIDIA GPU found, run NVIDIA management library and get GPU informations...")
             pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
             self.index = pynvml.nvmlDeviceGetHandleByIndex(0)
             self.B_to_MiB = 1048576  # conversion factor from Bytes to Mebibyte (2^20)
@@ -111,9 +121,6 @@ class SaveData:
             GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
             print(f"""GPU properties: Name {GPU_name} Device Index: {GPU_id} Total Memory: {GPU_total_memory:.0f} MiB Temperature: {GPU_temperature} °C Power Consumption: {GPU_power_consumption:.1f} W""")
-        
-        else:
-            print("No NVIDIA GPU found...")
 
     def get_speed_informations(self, dt):
 
@@ -127,6 +134,10 @@ class SaveData:
 
         return speed_info
 
+    def get_CPU_informations(self):
+        
+        print("No info")
+
     def get_GPU_informations(self):
 
         GPU_memory_used = pynvml.nvmlDeviceGetMemoryInfo(self.index).used  # get GPU memory used in Bytes
@@ -138,23 +149,18 @@ class SaveData:
 
         return GPU_info
 
-    def save(self, speed_info, GPU_info = None):
-        
-        self.speed_info = speed_info
-        if GPU_info is not None:
-            self.GPU_info = GPU_info
+    def save(self, speed_info, device_info):
 
         with open(self.save_dir / 'info.txt', 'a') as f:
-            if self.test_info:
+            if self.write_info:
                 f.truncate(0)
-                self.test_info = False
+                self.write_info = False
 
             # Write speed informations:
-            f.write(str(self.speed_info[0]) + ' ' + str(self.speed_info[1]) + ' ' + 
-                str(self.speed_info[2]) + ' ' + str(self.speed_info[3]) + ' ' + str(self.speed_info[4]))
+            f.write(str(speed_info[0]) + ' ' + str(speed_info[1]) + ' ' + str(speed_info[2]) + 
+                ' ' + str(speed_info[3]) + ' ' + str(speed_info[4]))
                 
-            # Write GPU informations:
-            if GPU_info is not None:
-                f.write(' ' + str(self.GPU_info[0]) + ' ' + str(self.GPU_info[1]) + ' ' + 
-                    str(self.GPU_info[2]) + ' ' + str(self.GPU_info[3]))
+            # Write device informations:
+            f.write(' ' + str(device_info[0]) + ' ' + str(device_info[1]) + ' ' + str(device_info[2]) + ' ' + str(device_info[3]))
+
             f.write('\n')

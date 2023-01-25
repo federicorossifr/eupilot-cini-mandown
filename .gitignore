@@ -1,9 +1,8 @@
-# videos and images
-
 # files
 man_down_classifier.py
-test.py
 benchmark.py
+plots.py
+test.py
 
 # folders
 __pycache__

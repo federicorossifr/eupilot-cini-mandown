@@ -1,6 +1,5 @@
 
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 class Plots:
@@ -19,7 +18,7 @@ class Plots:
         self.GPU_power_consumption = []
 
         # Read data from file:
-        with open(file_path, 'r') as f:
+        with open(str(file_path + '/info.txt'), 'r') as f:
             data = f.readlines()
             self.N = len(data)
 

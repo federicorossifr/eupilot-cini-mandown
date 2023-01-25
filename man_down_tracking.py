@@ -48,7 +48,7 @@ from man_down.man_down import ManDown
 from tools.general import (Annotator, colors, time_sync, check_img_size, check_file, check_imshow, 
                             increment_path, select_device, non_max_suppression)
 from tools.load import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, load_yaml
-from tools.save import SaveData
+from tools.save import SaveInfo
 
 # Parameters:
 source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
@@ -66,7 +66,7 @@ line_thickness = 3  # bounding box thickness (pixels)
 half = False  # use FP16 half-precision inference
 vid_stride = 1  # video frame-rate stride
 view_img = False  # show results
-save_img = False  # save images
+save_img = True  # save images
 save_txt = True  # save data to *.txt
 exist_ok = False  # existing project/name ok, do not increment
 augment = False  # augmented inference
@@ -98,8 +98,8 @@ man_down = ManDown(ratio_thres = mandown_thres, fp16 = half)
 deep_sort_params = load_yaml(deep_sort_params_path).get('parameters')
 deep_sort = DeepSORT(reid_weights, parameters = deep_sort_params, device = device, fp16 = half)
 
-# Load Data Saver:
-data_logger = SaveData(save_dir, device)
+# Load Logger:
+data_logger = SaveInfo(save_dir, device)
 
 # Dataloader:
 bs = 1  # batch_size
@@ -221,12 +221,12 @@ for path, img, img0s, vid_cap, s in dataset:
 
     # Save data:
     if save_txt:
-        speed_info = data_logger.get_speed_informations(dt)
-        if str(device) != 'cpu':
-            GPU_info = data_logger.get_GPU_informations()
-            data_logger.save(speed_info, GPU_info)  # speed info and GPU info if available
+        speed_info = data_logger.get_speed_informations(dt)  # get speed informations
+        if str(device) == 'cpu':
+            device_info = data_logger.get_CPU_informations()  # get GPU informations if available
         else:
-            data_logger.save(speed_info)  # only speed info if GPU isn't available
+            device_info = data_logger.get_GPU_informations()  # get CPU informations if GPU is not available
+        data_logger.save(speed_info, device_info)
 
     print(f"{s}")
     print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for post-process, {dt[3]*1000:.1f} ms for man down, {dt[4]*1000:.1f} ms for DeepSORT')
