@@ -57,13 +57,19 @@ Weights:
 ***
 ## Benchmark
 
+platform 1 = **CPU ARM Cortex-A72**     
+platform 2 = **CPU Intel i7-10750H**     
+platform 3 = **CPU Intel i7-10750H + GPU NVIDIA GeForce GTX 1650 Ti + TensorRT**    
+platform 4 = **CPU Intel Xeon**     
+platform 5 = **CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT**    
+
 | Platform | YOLOv5x Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | GPU Temperature<br>(°C) |
-|----------|:-----------------------:|:-------------------------:|:--------------:|:---------------:|:---------------:|
-| CPU ARM Cortex-A72                                              | **7955.1** | - | - | - | - | - | - |
-| CPU Intel i7-10750H                                             | **860.9** | - | - | - | - | - | - |
-| CPU Intel i7-10750H + GPU NVIDIA GeForce GTX 1650 Ti + TensorRT | **86.0** | - | - | - | - | - | - |
-| CPU Intel Xeon                                                  | **341.6** | - | - | - | - | - | - |
-| CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT                 | **37.8** | - | - | - | - | - | - |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| 1 | **7955.1** | - | - | - | - | - | - |
+| 2 | **860.9** | - | - | - | - | - | - |
+| 3 | **86.0** | - | - | - | - | - | - |
+| 4 | **341.6** | - | - | - | - | - | - |
+| 5 | **37.8** | - | - | - | - | - | - |
 
 ***
 
