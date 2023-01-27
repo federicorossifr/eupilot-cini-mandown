@@ -119,7 +119,6 @@ for path, img, img0s, vid_cap, s in dataset:
     # Pre-Process Image:
     t1 = time_sync()
     img = np.ndarray.astype(img, dtype = np.half) if half else np.ndarray.astype(img, dtype = np.float32)  # uint8 to fp16/32
-    # img = img.half() if model.fp16 else img.float()  # uint8 to fp16/32
     img /= 255  # 0 - 255 to 0.0 - 1.0
     if len(img.shape) == 3:
         img = img[None]  # expand for batch dim
@@ -182,7 +181,7 @@ for path, img, img0s, vid_cap, s in dataset:
                     scores = md_det[:, 4]
                     for j, (output, score) in enumerate(zip(outputs, scores)):
                         xyxy = output[0:4]  # bounding box in xyxy form
-                        id = output[4]  # object number 
+                        id = int(output[4])  # object number
                         class_id = output[5]  # object class
                         c = int(class_id)  # integer class
                         if c == 0:
@@ -223,9 +222,9 @@ for path, img, img0s, vid_cap, s in dataset:
     if save_txt:
         speed_info = data_logger.get_speed_informations(dt)  # get speed informations
         if str(device) == 'cpu':
-            device_info = data_logger.get_CPU_informations()  # get GPU informations if available
+            device_info = data_logger.get_CPU_informations()  # get CPU informations
         else:
-            device_info = data_logger.get_GPU_informations()  # get CPU informations if GPU is not available
+            device_info = data_logger.get_GPU_informations()  # if available get GPU informations
         data_logger.save(speed_info, device_info)
 
     print(f"{s}")
