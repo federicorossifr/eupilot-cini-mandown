@@ -22,20 +22,17 @@ Formats accepted:
 
 ## Installation and usage
 
-In a work environment with **Python>=3.7** and **torch** installed, clone and install the official YOLOv5 repository using the following commands:
+In a work environment with **Python>=3.7** and **torch>=1.7** installed, clone this repository using the following commands:
 ```
+git clone https://github.com/federicorossifr/eupilot-cini-mandown.git
+```
+Then, clone and install the official YOLOv5 repository using the following commands:
+```
+cd eupilot-cini-mandown
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
 pip install -r requirements.txt  # install
 ```
-
-Then, clone and install this repository using the following commands:
-```
-git clone git@github.com:federicorossifr/eupilot-cini-mandown.git
-cd eupilot-cini-mandown
-pip install -r requirements.txt
-```
-
 Execute code:
 ```
 python man_down_tracking.py
@@ -60,7 +57,13 @@ Weights:
 ***
 ## Benchmark
 
-![benchmark.png](benchmark.png)
+| Platform | YOLOv5x Inference Speed | Man Down Classifier Speed | DeepSORT Speed | CPU Temperature | GPU Temperature |
+|----------|:-----------------------:|:-------------------------:|:--------------:|:---------------:|:---------------:|
+| CPU ARM Cortex-A72                                              | - | - | - | - | - | - | - |
+| CPU Intel i7-10750H                                             | - | - | - | - | - | - | - |
+| CPU Intel i7-10750H + GPU NVIDIA GeForce GTX 1650 Ti + TensorRT | - | - | - | - | - | - | - |
+| CPU Intel Xeon                                                  | - | - | - | - | - | - | - |
+| CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT                 | - | - | - | - | - | - | - |
 
 ***
 
