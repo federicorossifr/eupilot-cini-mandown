@@ -71,7 +71,7 @@ platform 5: **CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT**
 | 4 | **341.6** | - | - | - | - | - | - |
 | 5 | **37.8** | - | - | - | - | - | - |
 
-<p align = "center"><img width="1000" src="benchmark.png"></p>
+<p align = "center"><img width="600" src="benchmark.png"></p>
 
 ***
 
