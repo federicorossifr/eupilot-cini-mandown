@@ -52,7 +52,7 @@ from tools.save import SaveInfo
 
 # Parameters:
 source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
-yolo_weights = WEIGHTS / 'yolov5x.engine'  # YOLOv5 model path
+yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
 classes_path = ROOT / 'data/coco.yaml'  # dataset.yaml path
@@ -86,7 +86,6 @@ save_dir.mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector:
 device = select_device(device)
-# device = torch.device('cpu')  # for test on CPU
 model = DetectMultiBackend(yolo_weights, device = device, data = classes_path, fp16 = half)
 stride, names = model.stride, model.names
 pt, onnx, engine = model.pt, model.onnx, model.engine
