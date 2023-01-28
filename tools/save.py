@@ -1,11 +1,14 @@
 
+import platform
 import time
 import math
+import psutil
 import pynvml
 
 def get_CPU_informations():
 
-    print("No info")
+    #ToDo
+    return None
 
 def get_GPU_informations():
 
@@ -100,14 +103,20 @@ class SaveInfo:
         self.write_info = True
         self.save_dir = save_dir
         self.device = device
+        
+        print("Get CPU informations...")
 
-        if str(self.device) is 'cpu':
+        system = platform.system()
+        print("System: ", system)
+        CPU_name = platform.machine()
 
-            print("No NVIDIA GPU found, get CPU informations...")
+        CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
+        CPU_temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
+        CPU_power_consumption = 0.0  # get CPU power consumption in W
 
+        print(f"""CPU properties: Name {CPU_name} Temperature: {CPU_temperature} °C Power Consumption: {CPU_power_consumption:.1f} W""")
 
-        else:
-
+        if str(self.device) != 'cpu':
             print("NVIDIA GPU found, run NVIDIA management library and get GPU informations...")
             pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
             self.index = pynvml.nvmlDeviceGetHandleByIndex(0)
@@ -116,7 +125,7 @@ class SaveInfo:
 
             GPU_name = str(pynvml.nvmlDeviceGetName(self.index)).replace("b", "")  # get GPU name
             GPU_id = pynvml.nvmlDeviceGetIndex(self.index)  # get GPU ID
-            GPU_total_memory = pynvml.nvmlDeviceGetMemoryInfo(self.index).total/self.B_to_MiB  # get total GPU memory in Bytes
+            GPU_total_memory = pynvml.nvmlDeviceGetMemoryInfo(self.index).total/self.B_to_MiB  # get total GPU memory in MiB
             GPU_temperature = pynvml.nvmlDeviceGetTemperature(self.index, self.NVML_TEMPERATURE_GPU)  # get GPU temperature in °C
             GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
@@ -136,11 +145,17 @@ class SaveInfo:
 
     def get_CPU_informations(self):
         
-        print("No info")
+        CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
+        CPU_temperature = 0.0  # get CPU temperature in °C
+        CPU_power_consumption = 0.0  # get CPU power consumption in W
+
+        CPU_info = [CPU_utilization_rate, CPU_temperature, CPU_power_consumption]
+
+        return CPU_info
 
     def get_GPU_informations(self):
 
-        GPU_memory_used = pynvml.nvmlDeviceGetMemoryInfo(self.index).used  # get GPU memory used in Bytes
+        GPU_memory_used = pynvml.nvmlDeviceGetMemoryInfo(self.index).used/self.B_to_MiB  # get GPU memory used in MiB
         GPU_utilization_rate = pynvml.nvmlDeviceGetUtilizationRates(self.index).gpu  # get GPU utilization rate in %
         GPU_temperature = pynvml.nvmlDeviceGetTemperature(self.index, self.NVML_TEMPERATURE_GPU)  # get GPU temperature in °C
         GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
@@ -149,7 +164,7 @@ class SaveInfo:
 
         return GPU_info
 
-    def save(self, speed_info, device_info):
+    def save(self, speed_info, CPU_info, GPU_info = None):
 
         with open(self.save_dir / 'info.txt', 'a') as f:
             if self.write_info:
@@ -159,8 +174,12 @@ class SaveInfo:
             # Write speed informations:
             f.write(str(speed_info[0]) + ' ' + str(speed_info[1]) + ' ' + str(speed_info[2]) + 
                 ' ' + str(speed_info[3]) + ' ' + str(speed_info[4]))
-                
-            # Write device informations:
-            f.write(' ' + str(device_info[0]) + ' ' + str(device_info[1]) + ' ' + str(device_info[2]) + ' ' + str(device_info[3]))
+            
+            # Write CPU informations:
+            f.write(' ' + str(CPU_info[0]) + ' ' + str(CPU_info[1]) + ' ' + str(CPU_info[2]))
+
+            # Write GPU informations (if available):
+            if GPU_info is not None:
+                f.write(' ' + str(GPU_info[0]) + ' ' + str(GPU_info[1]) + ' ' + str(GPU_info[2]) + ' ' + str(GPU_info[3]))
 
             f.write('\n')

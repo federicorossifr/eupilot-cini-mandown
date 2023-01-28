@@ -63,13 +63,13 @@ platform 3: **CPU Intel i7-10750H + GPU NVIDIA GeForce GTX 1650 Ti + TensorRT**
 platform 4: **CPU Intel Xeon**     
 platform 5: **CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT**    
 
-| Platform | YOLOv5x Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | GPU Temperature<br>(°C) |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | **7955.1** | - | - | - | - | - | - |
-| 2 | **860.9** | - | - | - | - | - | - |
-| 3 | **86.0** | - | - | - | - | - | - |
-| 4 | **341.6** | - | - | - | - | - | - |
-| 5 | **37.8** | - | - | - | - | - | - |
+| Platform | YOLOv5x Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| 1 | **7955.1** | - | - | - | - | - | - | - |
+| 2 | **860.9** | - | - | - | - | - | - | - |
+| 3 | **86.0** | - | - | - | - | - | - | - |
+| 4 | **341.6** | - | - | - | - | - | - | - |
+| 5 | **37.8** | - | - | - | - | - | - | - |
 
 <p align = "center"><img width="600" src="benchmark.png"></p>
 

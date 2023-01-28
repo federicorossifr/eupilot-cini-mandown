@@ -86,6 +86,7 @@ save_dir.mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector:
 device = select_device(device)
+# device = torch.device('cpu')  # for test on CPU
 model = DetectMultiBackend(yolo_weights, device = device, data = classes_path, fp16 = half)
 stride, names = model.stride, model.names
 pt, onnx, engine = model.pt, model.onnx, model.engine
@@ -221,11 +222,12 @@ for path, img, img0s, vid_cap, s in dataset:
     # Save data:
     if save_txt:
         speed_info = data_logger.get_speed_informations(dt)  # get speed informations
+        CPU_info = data_logger.get_CPU_informations()  # get CPU informations
         if str(device) == 'cpu':
-            device_info = data_logger.get_CPU_informations()  # get CPU informations
+            data_logger.save(speed_info, CPU_info)
         else:
-            device_info = data_logger.get_GPU_informations()  # if available get GPU informations
-        data_logger.save(speed_info, device_info)
+            GPU_info = data_logger.get_GPU_informations()  # get GPU informations (if available)
+            data_logger.save(speed_info, CPU_info, GPU_info)
 
     print(f"{s}")
     print(f'speed: {dt[0]*1000:.1f} ms for pre-process, {dt[1]*1000:.1f} ms for inference, {dt[2]*1000:.1f} ms for post-process, {dt[3]*1000:.1f} ms for man down, {dt[4]*1000:.1f} ms for DeepSORT')
