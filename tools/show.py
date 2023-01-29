@@ -48,7 +48,7 @@ class ShowSpeed:
         plt.title('Pre-Process Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.xlim(0, self.N)
+        plt.xlim(0, self.N - 1)
         plt.ylim()
         plt.savefig(str(save_path) +'/Pre-Process Speed')
 
@@ -68,7 +68,7 @@ class ShowSpeed:
         plt.title('Inference Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.xlim(0, self.N)
+        plt.xlim(0, self.N - 1)
         plt.ylim(0, max(y) + 40)
         plt.savefig(str(save_path) + '/Inference Speed')
 
@@ -88,7 +88,7 @@ class ShowSpeed:
         plt.title('Post-Process Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.xlim(0, self.N)
+        plt.xlim(0, self.N - 1)
         plt.ylim(0, max(y) + 5)
         plt.savefig(str(save_path) + '/Post-Process Speed')
 
@@ -108,7 +108,7 @@ class ShowSpeed:
         plt.title('Man Down Classifier Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.xlim(0, self.N)
+        plt.xlim(0, self.N - 1)
         plt.ylim(-1, max(y) + 5)
         plt.savefig(str(save_path) + '/Man Down Classifier Speed')
 
@@ -128,7 +128,7 @@ class ShowSpeed:
         plt.title('DeepSORT Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
-        plt.xlim(0, self.N)
+        plt.xlim(0, self.N - 1)
         plt.ylim(0, max(y) + 10)
         plt.savefig(str(save_path) + '/DeepSORT Speed')
 

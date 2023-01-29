@@ -109,9 +109,11 @@ class SaveInfo:
         system = platform.system()
         print("System: ", system)
         CPU_name = platform.machine()
-
         CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
-        CPU_temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
+        if system != 'Windows':
+            CPU_temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
+        else:
+            CPU_temperature = 0.0
         CPU_power_consumption = 0.0  # get CPU power consumption in W
 
         print(f"""CPU properties: Name {CPU_name} Temperature: {CPU_temperature} °C Power Consumption: {CPU_power_consumption:.1f} W""")
