@@ -67,11 +67,11 @@ platform 5: **CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT**
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | - | **7955.1** | - | - | - | - | - | - | - |
-| 2 | - | **860.9** | - | - | - | - | - | - | - |
-| 3 | - | **86.0** | - | - | - | - | - | - | - |
-| 4 | - | **341.6** | - | - | - | - | - | - | - |
-| 5 | - | **37.8** | - | - | - | - | - | - | - |
+| 1 | 0.1 | **7955.1** | - | - | - | - | - | - | - |
+| 2 | 1.1 | **860.9** | - | - | - | - | - | - | - |
+| 3 | 6.1 | **86.0** | - | - | - | - | - | - | - |
+| 4 | 1.6 | **341.6** | - | - | - | - | - | - | - |
+| 5 | 11.4 | **37.8** | - | - | - | - | - | - | - |
 
 <p align = "center"><img width="600" src="benchmark.png"></p>
 
