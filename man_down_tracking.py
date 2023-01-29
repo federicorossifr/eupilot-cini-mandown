@@ -52,7 +52,7 @@ from tools.save import SaveInfo
 
 # Parameters:
 source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
-yolo_weights = WEIGHTS / 'yolov5x.onnx'  # YOLOv5 model path
+yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x0_25_msmt17.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
 classes_path = ROOT / 'data/coco.yaml'  # dataset.yaml path
