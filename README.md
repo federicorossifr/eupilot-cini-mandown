@@ -33,6 +33,11 @@ git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
 pip install -r requirements.txt  # install
 ```
+Finally, install requirements using the following commands:
+```
+cd ..
+pip install -r requirements.txt  # install
+```
 Execute code:
 ```
 python man_down_tracking.py
