@@ -6,15 +6,15 @@ jedi>=0.17.2
 pafy==0.5.5
 protobuf==3.19.6
 
-# TensorRT Inference
-tensorrt
+# Uncomment for TensorRT Inference
+# tensorrt
 
-# ONNX Inference
-onnx
-onnxruntime-gpu
-onnx-simplifier
-onnx-graphsurgeon
-onnxoptimizer
+# Uncomment for ONNX Inference
+# onnx
+# onnxruntime-gpu
+# onnx-simplifier
+# onnx-graphsurgeon
+# onnxoptimizer
 
 # NVIDIA GPUs analysis
 pynvml>=11.4.1
