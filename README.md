@@ -62,23 +62,27 @@ Weights:
 ***
 ## Benchmark
 
-All the tests are made using YOLOv5x model.
+All the tests are made using YOLOv5x model and OSNet x1.0
+   
+platform 1: **Intel i7-10750H**     
+platform 2: **Intel i7-10750H + NVIDIA GeForce GTX 1650 Ti + TensorRT**    
+platform 3: **Intel Xeon**     
+platform 4: **Intel Xeon + NVIDIA Tesla T4 + TensorRT**  
+platform 5: **ARM Cortex-A72**  
+platform 6: **ARM Neoverse N1**  
+platform 7: **Fujitsu A64FX** (ARMv8-A based)
 
-platform 1: **CPU ARM Cortex-A72**     
-platform 2: **CPU Intel i7-10750H**     
-platform 3: **CPU Intel i7-10750H + GPU NVIDIA GeForce GTX 1650 Ti + TensorRT**    
-platform 4: **CPU Intel Xeon**     
-platform 5: **CPU Intel Xeon + GPU NVIDIA Tesla T4 + TensorRT**    
+| Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| 1 | 1.1 | **822** | 0.3 | 39.8 | 95 | Not Measured | - | - |
+| 2 | 6.1 | **86.3** | 0.3 | 38.4 | 75 | Not Measured | 76.4 | 40.8 |
+| 3 | 1.6 | **574** | 0.4 | 25.4 | Not Measured | Not Measured | - | - |
+| 4 | 10.9 | **37.6** | 0.3 | 27.8 | Not Measured | Not Measured | 49.1 | 55.8 |
+| 5 | 0.1 | **7572** | 1.2 | 335 | 82 | Not Measured | - | - |
+| 6 | - | **-** | - | - | - | - | - | - |
+| 7 | - | **-** | - | - | - | - | - | - |
 
-| Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | 0.1 | **7572** | 1.2 | 335 | 82 | - | - |
-| 2 | 1.1 | **822** | 0.3 | 39.8 | 95 | - | - |
-| 3 | 6.1 | **86.3** | 0.3 | 38.4 | 75 | 76.4 | 40.8 |
-| 4 | 1.6 | **574** | 0.4 | 25.4 | Not Measured | - | - |
-| 5 | 10.9 | **37.6** | 0.3 | 27.8 | Not Measured | 49.1 | 55.8 |
-
-<p align = "center"><img width="600" src="benchmark.png"></p>
+<!-- <p align = "center"><img width="600" src="benchmark.png"></p> -->
 
 ***
 
