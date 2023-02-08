@@ -240,7 +240,6 @@ class MLFN(nn.Module):
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
 
-
 def init_pretrained_weights(model, model_url):
     """Initializes model with pretrained weights.
     
@@ -256,8 +255,7 @@ def init_pretrained_weights(model, model_url):
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
 
-
-def mlfn(num_classes, loss='softmax', pretrained=True, **kwargs):
+def mlfn(num_classes, loss = 'softmax', pretrained = True, **kwargs):
     model = MLFN(num_classes, loss, **kwargs)
     if pretrained:
         # init_pretrained_weights(model, model_urls['imagenet'])

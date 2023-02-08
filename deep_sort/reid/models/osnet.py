@@ -21,7 +21,6 @@ pretrained_urls = {
     'https://drive.google.com/uc?id=1sr90V6irlYYDd4_4ISU2iruoRG8J__6l'
 }
 
-
 ##########
 # Basic layers
 ##########
@@ -516,9 +515,8 @@ def init_pretrained_weights(model, key=''):
             )
 
 
-##########
 # Instantiation
-##########
+
 def osnet_x1_0(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
     # standard size (width x1.0)
     model = OSNet(

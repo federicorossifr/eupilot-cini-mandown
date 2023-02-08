@@ -25,7 +25,6 @@ def conv3x3(in_planes, out_planes, stride=1):
         bias=False
     )
 
-
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -56,7 +55,6 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
-
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -104,7 +102,6 @@ class Bottleneck(nn.Module):
 
         return out
 
-
 class DimReduceLayer(nn.Module):
 
     def __init__(self, in_channels, out_channels, nonlinear):
@@ -126,7 +123,6 @@ class DimReduceLayer(nn.Module):
 
     def forward(self, x):
         return self.layers(x)
-
 
 class PCB(nn.Module):
     """Part-based Convolutional Baseline.
@@ -263,7 +259,6 @@ class PCB(nn.Module):
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
 
-
 def init_pretrained_weights(model, model_url):
     """Initializes model with pretrained weights.
     
@@ -278,7 +273,6 @@ def init_pretrained_weights(model, model_url):
     }
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
-
 
 def pcb_p6(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = PCB(
@@ -295,7 +289,6 @@ def pcb_p6(num_classes, loss='softmax', pretrained=True, **kwargs):
     if pretrained:
         init_pretrained_weights(model, model_urls['resnet50'])
     return model
-
 
 def pcb_p4(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = PCB(

@@ -1,11 +1,13 @@
 
 import os
 import glob
+import warnings
 from pathlib import Path
 import time
 import math
 import yaml
 from threading import Thread
+from collections import OrderedDict
 from urllib.parse import urlparse
 import cv2
 import numpy as np
@@ -20,6 +22,61 @@ def load_yaml(file = 'data.yaml'):
     # Single-line safe yaml loading
     with open(file, errors = 'ignore') as f:
         return yaml.safe_load(f)
+
+def load_pretrained_weights(model, weights_path):
+    r"""Loads pretrianed weights to model.
+
+    Features::
+        - Incompatible layers (unmatched in name or size) will be ignored.
+        - Can automatically deal with keys containing "module.".
+
+    Args:
+        model (nn.Module): network model.
+        weight_path (str): path to pretrained weights.
+
+    Examples::
+        >>> from torchreid.utils import load_pretrained_weights
+        >>> weight_path = 'log/my_model/model-best.pth.tar'
+        >>> load_pretrained_weights(model, weight_path)
+    """
+    checkpoint = torch.load(weights_path)
+    if 'state_dict' in checkpoint:
+        state_dict = checkpoint['state_dict']
+    else:
+        state_dict = checkpoint
+
+    model_dict = model.state_dict()
+    new_state_dict = OrderedDict()
+    matched_layers, discarded_layers = [], []
+
+    for k, v in state_dict.items():
+        if k.startswith('module.'):
+            k = k[7:]  # discard module.
+
+        if k in model_dict and model_dict[k].size() == v.size():
+            new_state_dict[k] = v
+            matched_layers.append(k)
+        else:
+            discarded_layers.append(k)
+
+    model_dict.update(new_state_dict)
+    model.load_state_dict(model_dict)
+
+    if len(matched_layers) == 0:
+        warnings.warn(
+            'The pretrained weights "{}" cannot be loaded, '
+            'please check the key names manually '
+            '(** ignored and continue **)'.format(weights_path)
+        )
+    else:
+        print(f"""Successfully loaded pretrained weights from {weights_path}""")
+
+        if len(discarded_layers) > 0:
+            print(
+                '** The following layers are discarded '
+                'due to unmatched keys or layer size: {}'.
+                format(discarded_layers)
+            )
 
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`

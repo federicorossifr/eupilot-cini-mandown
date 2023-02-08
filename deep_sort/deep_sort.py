@@ -1,4 +1,7 @@
-'''DeepSORT Algorithm'''
+"""
+DeepSORT Algorithm
+
+"""
 
 import numpy as np
 import torch

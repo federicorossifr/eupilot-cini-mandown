@@ -49,7 +49,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim()
+        plt.ylim(0, max(y) + 1)
         plt.savefig(str(save_path) +'/Pre-Process Speed')
 
     def inference_average_speed(self):
@@ -69,7 +69,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 40)
+        plt.ylim(0, max(y) + 300)
         plt.savefig(str(save_path) + '/Inference Speed')
 
     def post_process_average_speed(self):
@@ -89,7 +89,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 5)
+        plt.ylim(0, max(y) + 3)
         plt.savefig(str(save_path) + '/Post-Process Speed')
 
     def man_down_average_speed(self):
@@ -109,7 +109,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(-1, max(y) + 5)
+        plt.ylim(0, max(y) + 0.3)
         plt.savefig(str(save_path) + '/Man Down Classifier Speed')
 
     def deep_sort_average_speed(self):
@@ -129,7 +129,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 10)
+        plt.ylim(0, max(y) + 20)
         plt.savefig(str(save_path) + '/DeepSORT Speed')
 
     def algorithm_average_speed(self):
@@ -155,11 +155,11 @@ class ShowSpeed:
         plt.figure(num = 6)
         plt.plot(x, y)
         plt.grid(visible = True, linewidth = 0.5)
-        plt.title('Total Speed')
+        plt.title('Algorithm Speed')
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 10)
+        plt.ylim(0, max(y) + 300)
         plt.savefig(str(save_path) + '/Algorithm Speed')
 
     def speed_plot(self, save_path):
@@ -182,8 +182,8 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(self.algorithm_speed))
-        plt.legend()
+        plt.ylim(0, max(self.algorithm_speed) + 100)
+        # plt.legend()
         plt.savefig(str(save_path) + '/Speed')
 
 class ShowCPU:
@@ -249,14 +249,20 @@ class ShowCPU:
         plt.xlabel('Frame [N]')
         plt.ylabel('Temperature [°C]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 40)
         plt.savefig(str(save_path) + '/CPU Temperature')
 
-    def CPU_average_power_consumption(self):
+    def CPU_mean_power_consumption(self):
         average = []
         for i in range(0, self.N):
             sum = np.sum(self.CPU_power_consumption[0:i+1])
             average.append(round(np.divide(sum, i+1), 1))
+        return average
+
+    def CPU_average_power_consumption(self):
+        # Compute average GPU utilization rate in %
+        sum = np.sum(self.CPU_power_consumption)
+        average = round(np.divide(sum, self.N), 1)
         return average
 
     def CPU_power_consumption_plot(self, save_path):
@@ -264,9 +270,9 @@ class ShowCPU:
         x = self.x
         y = self.CPU_power_consumption
         mean = np.round(np.sum(self.CPU_power_consumption)/self.N, 1)
-        plt.figure(num = 13)
+        plt.figure(num = 10)
         plt.plot(x, y)
-        plt.plot(x, self.CPU_average_power_consumption(), label = f"""mean ({mean} W)""")
+        plt.plot(x, self.CPU_mean_power_consumption(), label = f"""mean ({mean} W)""")
         plt.grid(visible = True, linewidth = 0.5)
         plt.title('CPU Power Consumption')
         plt.xlabel('Frame [N]')
@@ -321,7 +327,7 @@ class ShowGPU:
         plt.xlabel('Frame [N]')
         plt.ylabel('Utilization Rate [%]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 15)
         plt.savefig(str(save_path) + '/GPU Utilization Rate')
 
     def GPU_average_temperature(self):
@@ -341,14 +347,20 @@ class ShowGPU:
         plt.xlabel('Frame [N]')
         plt.ylabel('Temperature [°C]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 30)
         plt.savefig(str(save_path) + '/GPU Temperature')
 
-    def GPU_average_power_consumption(self):
+    def GPU_mean_power_consumption(self):
         average = []
         for i in range(0, self.N):
             sum = np.sum(self.GPU_power_consumption[0:i+1])
             average.append(round(np.divide(sum, i+1), 1))
+        return average
+
+    def GPU_average_power_consumption(self):
+        # Compute average GPU utilization rate in %
+        sum = np.sum(self.GPU_power_consumption)
+        average = round(np.divide(sum, self.N), 1)
         return average
 
     def GPU_power_consumption_plot(self, save_path):
@@ -358,12 +370,12 @@ class ShowGPU:
         mean = np.round(np.sum(self.GPU_power_consumption)/self.N, 1)
         plt.figure(num = 13)
         plt.plot(x, y)
-        plt.plot(x, self.GPU_average_power_consumption(), label = f"""mean ({mean} W)""")
+        plt.plot(x, self.GPU_mean_power_consumption(), label = f"""mean ({mean} W)""")
         plt.grid(visible = True, linewidth = 0.5)
         plt.title('GPU Power Consumption')
         plt.xlabel('Frame [N]')
         plt.ylabel('Power Consumption [W]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 25)
         plt.legend()
         plt.savefig(str(save_path) + '/GPU Power Consumption')

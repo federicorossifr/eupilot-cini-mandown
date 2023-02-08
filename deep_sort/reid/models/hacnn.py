@@ -27,7 +27,6 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
 
-
 class InceptionA(nn.Module):
 
     def __init__(self, in_channels, out_channels):
@@ -59,7 +58,6 @@ class InceptionA(nn.Module):
         y = torch.cat([s1, s2, s3, s4], dim=1)
         return y
 
-
 class InceptionB(nn.Module):
 
     def __init__(self, in_channels, out_channels):
@@ -87,7 +85,6 @@ class InceptionB(nn.Module):
         y = torch.cat([s1, s2, s3], dim=1)
         return y
 
-
 class SpatialAttn(nn.Module):
     """Spatial Attention (Sec. 3.1.I.1)"""
 
@@ -111,7 +108,6 @@ class SpatialAttn(nn.Module):
         x = self.conv2(x)
         return x
 
-
 class ChannelAttn(nn.Module):
     """Channel Attention (Sec. 3.1.I.2)"""
 
@@ -128,7 +124,6 @@ class ChannelAttn(nn.Module):
         x = self.conv1(x)
         x = self.conv2(x)
         return x
-
 
 class SoftAttn(nn.Module):
     """Soft Attention (Sec. 3.1.I)
@@ -190,7 +185,6 @@ class HarmAttn(nn.Module):
         theta = self.hard_attn(x)
         return y_soft_attn, theta
 
-
 class HACNN(nn.Module):
     """Harmonious Attention Convolutional Neural Network.
 
@@ -200,7 +194,6 @@ class HACNN(nn.Module):
     Public keys:
         - ``hacnn``: HACNN.
     """
-
     # Args:
     #    num_classes (int): number of classes to predict
     #    nchannels (list): number of channels AFTER concatenation

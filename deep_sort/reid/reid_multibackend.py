@@ -1,77 +1,49 @@
-'''Re-Identification Multi-Backend'''
+"""
+Re-Identification Multi-Backend
 
-import torch.nn as nn
-import torch
+"""
+
 from pathlib import Path
-import numpy as np
-import torchvision.transforms as transforms
-import cv2
-import sys
-import torchvision.transforms as T
 from collections import OrderedDict, namedtuple
-import gdown
-from os.path import exists as file_exists
+import cv2
+import numpy as np
+import torch
+import torch.nn as nn
+import torchvision.transforms as T
 
-from yolov5.utils.general import LOGGER, check_version, check_requirements
-from reid.reid_model_factory import show_downloadeable_models, get_model_url, get_model_name, load_pretrained_weights
-from reid.models import build_model
-
-def check_suffix(file='yolov5s.pt', suffix=('.pt',), msg=''):
-    # Check file(s) for acceptable suffix
-    if file and suffix:
-        if isinstance(suffix, str):
-            suffix = [suffix]
-        for f in file if isinstance(file, (list, tuple)) else [file]:
-            s = Path(f).suffix.lower()  # file suffix
-            if len(s):
-                assert s in suffix, f"{msg}{f} acceptable suffix is {suffix}"
+from deep_sort.reid.models import build_model, get_model_name
+from tools.general import check_version, check_requirements, check_suffix
+from tools.load import load_pretrained_weights
 
 class ReIDDetectMultiBackend(nn.Module):
-    # ReID models MultiBackend class for python inference on various backends
+    # ReID models multi-backend class inference on various backends:
     def __init__(self, weights = 'osnet_x0_25_msmt17.pt', device = torch.device('cpu'), fp16 = False):
+        
         super().__init__()
 
         w = weights[0] if isinstance(weights, list) else weights
-        # self.pt, self.jit, self.onnx, self.xml, self.engine, self.coreml, \
-        #     self.saved_model, self.pb, self.tflite, self.edgetpu, self.tfjs = self.model_type(w)
-          # get backend
-
         self.pt, self.jit, self.onnx, self.engine = self.model_type(w)  # get backend
-        # self.pt = True  # CORREGGERE
-        
         self.fp16 = fp16
         self.fp16 &= self.pt or self.jit or self.engine  # FP16
+        self.device = device
 
         # Build transform functions
-        self.device = device
         self.image_size = (256, 128)
         self.pixel_mean = [0.485, 0.456, 0.406]
         self.pixel_std = [0.229, 0.224, 0.225]
         self.transforms = []
         self.transforms += [T.Resize(self.image_size)]
         self.transforms += [T.ToTensor()]
-        self.transforms += [T.Normalize(mean=self.pixel_mean, std=self.pixel_std)]
+        self.transforms += [T.Normalize(mean = self.pixel_mean, std = self.pixel_std)]
         self.preprocess = T.Compose(self.transforms)
         self.to_pil = T.ToPILImage()
 
+        # Build model:
         model_name = get_model_name(w)
-
-        if w.suffix == '.pt':
-            model_url = get_model_url(w)
-            if not file_exists(w) and model_url is not None:
-                gdown.download(model_url, str(w), quiet=False)
-            elif file_exists(w):
-                pass
-            else:
-                print(f'No URL associated to the chosen DeepSORT weights ({w}). Choose between:')
-                show_downloadeable_models()
-                exit()
-
-        # Build model
-        self.model = build_model(model_name, num_classes = 1, pretrained = not (w and w.is_file()), use_gpu = device)
+        use_gpu = True if str(self.device) != 'cpu' else False
+        self.model = build_model(model_name, num_classes = 1, pretrained = not (w and w.is_file()), use_gpu = use_gpu)
 
         if self.pt:  # PyTorch
-            # populate model arch with weights
             if w and w.is_file() and w.suffix == '.pt':
                 load_pretrained_weights(self.model, w)
             self.model.to(device).eval()
@@ -83,10 +55,10 @@ class ReIDDetectMultiBackend(nn.Module):
         elif self.onnx:  # ONNX Runtime
             print(f'Loading {w} for ONNX Runtime inference...')
             cuda = torch.cuda.is_available() and device.type != 'cpu'
-            #check_requirements(('onnx', 'onnxruntime-gpu' if cuda else 'onnxruntime'))
+            check_requirements(('onnx', 'onnxruntime-gpu' if cuda else 'onnxruntime'))
             import onnxruntime
             providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'] if cuda else ['CPUExecutionProvider']
-            self.session = onnxruntime.InferenceSession(str(w), providers=providers)
+            self.session = onnxruntime.InferenceSession(str(w), providers = providers)
         elif self.engine:  # TensorRT
             print(f'Loading {w} for TensorRT inference...')
             import tensorrt as trt  # https://developer.nvidia.com/nvidia-tensorrt-download
@@ -116,11 +88,9 @@ class ReIDDetectMultiBackend(nn.Module):
             self.binding_addrs = OrderedDict((n, d.ptr) for n, d in self.bindings.items())
             batch_size = self.bindings['images'].shape[0]  # if dynamic, this is instead max batch size 
         else:
-            print('This model framework is not supported yet!')
-            exit()
+            print("Framework not implemented...")
         
-    @staticmethod
-    def model_type(p = 'path/to/model.pt'):
+    def model_type(self, p = 'path/to/model.pt'):
         # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
         from deep_sort.reid.reid_export import export_formats
         sf = list(export_formats().Suffix)  # export suffixes
@@ -130,28 +100,28 @@ class ReIDDetectMultiBackend(nn.Module):
 
         return types
 
-    def _preprocess(self, im_batch):
-
+    def pre_process(self, im_batch):
+        # Pre-process image:
         images = []
         for element in im_batch:
             image = self.to_pil(element)
             image = self.preprocess(image)
             images.append(image)
-        images = torch.stack(images, dim=0)
+        images = torch.stack(images, dim = 0)
         images = images.to(self.device)
 
         return images
     
     def forward(self, im_batch):
         
-        # preprocess batch
-        im_batch = self._preprocess(im_batch)
+        # Pre-process batch:
+        im_batch = self.pre_process(im_batch)
 
-        # batch to half
+        # Batch to half:
         if self.fp16 and im_batch.dtype != torch.float16:
            im_batch = im_batch.half()
 
-        # batch processing
+        # Inference:
         features = []
         if self.pt:
             features = self.model(im_batch)
@@ -171,12 +141,8 @@ class ReIDDetectMultiBackend(nn.Module):
             self.binding_addrs['images'] = int(im_batch.data_ptr())
             self.context.execute_v2(list(self.binding_addrs.values()))
             features = self.bindings['output'].data
-        elif self.xml:  # OpenVINO
-            im_batch = im_batch.cpu().numpy()  # FP32
-            features = self.executable_network([im_batch])[self.output_layer]
         else:
-            print('Framework not supported at the moment, we are working on it...')
-            exit()
+            print("Framework not implemented...")
 
         if isinstance(features, (list, tuple)):
             return self.from_numpy(features[0]) if len(features) == 1 else [self.from_numpy(x) for x in features]
@@ -186,10 +152,10 @@ class ReIDDetectMultiBackend(nn.Module):
     def from_numpy(self, x):
         return torch.from_numpy(x).to(self.device) if isinstance(x, np.ndarray) else x
 
-    def warmup(self, imgsz=[(256, 128, 3)]):
+    def warmup(self, imgsz = [(256, 128, 3)]):
         # Warmup model by running inference once
         warmup_types = self.pt, self.jit, self.onnx, self.engine, self.saved_model, self.pb
         if any(warmup_types) and self.device.type != 'cpu':
             im = [np.empty(*imgsz).astype(np.uint8)]  # input
-            for _ in range(2 if self.jit else 1):  #
+            for _ in range(2 if self.jit else 1):
                 self.forward(im)  # warmup

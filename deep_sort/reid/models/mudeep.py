@@ -5,7 +5,6 @@ from torch.nn import functional as F
 
 __all__ = ['MuDeep']
 
-
 class ConvBlock(nn.Module):
     """Basic convolutional block.
     
@@ -27,7 +26,6 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
 
-
 class ConvLayers(nn.Module):
     """Preprocessing layers."""
 
@@ -42,7 +40,6 @@ class ConvLayers(nn.Module):
         x = self.conv2(x)
         x = self.maxpool(x)
         return x
-
 
 class MultiScaleA(nn.Module):
     """Multi-scale stream layer A (Sec.3.1)"""
@@ -93,7 +90,6 @@ class Reduction(nn.Module):
         y = torch.cat([s1, s2, s3], dim=1)
         return y
 
-
 class MultiScaleB(nn.Module):
     """Multi-scale stream layer B (Sec.3.1)"""
 
@@ -124,7 +120,6 @@ class MultiScaleB(nn.Module):
         s4 = self.stream4(x)
         return s1, s2, s3, s4
 
-
 class Fusion(nn.Module):
     """Saliency-based learning fusion layer (Sec.3.2)"""
 
@@ -146,7 +141,6 @@ class Fusion(nn.Module):
         s4 = self.a4.expand_as(x4) * x4
         y = self.avgpool(s1 + s2 + s3 + s4)
         return y
-
 
 class MuDeep(nn.Module):
     """Multiscale deep neural network.
