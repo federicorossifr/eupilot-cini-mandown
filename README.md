@@ -62,27 +62,29 @@ Weights:
 ***
 ## Benchmark
 
-All the tests are made using YOLOv5x model and OSNet x1.0
+All the tests are made using YOLOv5x model and OSNet x1.0 model.
    
-platform 1: **Intel i7-10750H**     
-platform 2: **Intel i7-10750H + NVIDIA GeForce GTX 1650 Ti + TensorRT**    
-platform 3: **Intel Xeon**     
-platform 4: **Intel Xeon + NVIDIA Tesla T4 + TensorRT**  
-platform 5: **ARM Cortex-A72**  
-platform 6: **ARM Neoverse N1**  
-platform 7: **Fujitsu A64FX** (ARMv8-A based)
+platform 1: **ARM Cortex-A72**  
+platform 2: **ARM Neoverse N1**  
+platform 3: **Fujitsu A64FX** (ARMv8-A based)   
+platform 4: **Intel i7-10750H**     
+platform 5: **Intel i7-10750H + NVIDIA GeForce GTX 1650 Ti**    
+platform 6: **Intel Xeon**     
+platform 7: **Intel Xeon + NVIDIA Tesla T4**  
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | 1.1 | **822** | 0.3 | 39.8 | 95 | Not Measured | - | - |
-| 2 | 6.1 | **86.3** | 0.3 | 38.4 | 75 | Not Measured | 76.4 | 40.8 |
-| 3 | 1.6 | **574** | 0.4 | 25.4 | Not Measured | Not Measured | - | - |
-| 4 | 10.9 | **37.6** | 0.3 | 27.8 | Not Measured | Not Measured | 49.1 | 55.8 |
-| 5 | 0.1 | **7572** | 1.2 | 335 | 82 | Not Measured | - | - |
-| 6 | - | **-** | - | - | - | - | - | - |
-| 7 | - | **-** | - | - | - | - | - | - |
+| 1 | 0.1 | **7632** | 1.17 | **1032** | 81.9 | - | - | - |
+| 2 | 0.2 | **878** | 0.55 | **3794** | 51.6 | - | - | - |
+| 3 | 0.4 | **1221** | 1.12 | **1233** | - | - | - | - |
+| 4 | 1.0 | **794** | 0.3 | **200** | 95 | - | - | - |
+| 5 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.8 | 38.5 |
+| 6 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |
+| 7 | 11.6 | **33.9** | 0.3 | **28.3** | - | - | 49.4 | 57 |
 
-<!-- <p align = "center"><img width="600" src="benchmark.png"></p> -->
+<p align = "center"><img width="600" src="yolo_inference_speed.png"></p>
+
+<p align = "center"><img width="600" src="deep_sort_speed.png"></p>
 
 ***
 
