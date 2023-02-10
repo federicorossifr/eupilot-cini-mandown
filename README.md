@@ -7,8 +7,8 @@ This repository contains a configurable man down tracker. The detections generat
 ## Algorithm informations
 
 Algorithm inputs:
-- YOLOv5 model weights (such as 'yolov5s', 'yolov5l', 'yolov5x', etc..) 
-- Re-Identification model weights (such as 'osnet_x0_25.pt', 'osnet_x0_75.pt', etc...)
+- YOLOv5 model weights (such as 'yolov5s.pt', 'yolov5l.pt', 'yolov5x.pt', etc..) 
+- Re-Identification model weights (such as 'osnet_x1_0_market1501.pt', 'osnet_x0_75_market1501.pt', 'osnet_x0_25_market1501.pt', etc...)
 - Source path (path of the video file that sould be process)
 
 Algoritm outputs:
