@@ -1,7 +1,6 @@
 # Man Down tracking requirements
 # Usage: pip install -r requirements.txt
 
-gdown>=4.6.0
 jedi>=0.17.2
 pafy==0.5.5
 protobuf==3.19.6
