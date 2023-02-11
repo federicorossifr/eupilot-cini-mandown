@@ -68,8 +68,8 @@ platform 1: **ARM Cortex-A72**
 platform 2: **ARM Neoverse N1**  
 platform 3: **Fujitsu A64FX** (ARMv8-A based)   
 platform 4: **Intel i7-10750H**     
-platform 5: **Intel i7-10750H + NVIDIA GeForce GTX 1650 Ti**    
-platform 6: **Intel Xeon**     
+platform 5: **Intel Xeon**   
+platform 6: **Intel i7-10750H + NVIDIA GeForce GTX 1650 Ti**      
 platform 7: **Intel Xeon + NVIDIA Tesla T4**  
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
@@ -78,8 +78,8 @@ platform 7: **Intel Xeon + NVIDIA Tesla T4**
 | 2 | 0.2 | **878** | 0.5 | **3794** | 51.6 | - | - | - |
 | 3 | 0.4 | **1221** | 1.1 | **1233** | - | - | - | - |
 | 4 | 1.0 | **794** | 0.3 | **200** | 95 | - | - | - |
-| 5 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.8 | 38.5 |
-| 6 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |
+| 5 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |
+| 6 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.8 | 38.5 |
 | 7 | 11.6 | **33.9** | 0.3 | **28.3** | - | - | 49.4 | 57 |
 
 <p align = "center"><img width="600" src="yolo_inference_speed.png"></p>
