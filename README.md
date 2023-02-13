@@ -82,11 +82,11 @@ platform 8: **Intel Xeon with NVIDIA A100**
 | 5 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |
 | 6 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.8 | 38.5 |
 | 7 | 11.6 | **33.9** | 0.3 | **28.3** | - | - | 49.4 | 57 |
-| 8 | - | **-** | - | **-** | - | - | - | - |
+| 8 | 15.8 | **16.2** | 0.3 | **28.4** | - | - | - | - |
 
-<!-- <p align = "center"><img width="600" src="yolo_inference_speed.png"></p>
+<p align = "center"><img width="600" src="yolo_inference_speed.png"></p>
 
-<p align = "center"><img width="600" src="deep_sort_speed.png"></p> -->
+<p align = "center"><img width="600" src="deep_sort_speed.png"></p>
 
 ***
 
