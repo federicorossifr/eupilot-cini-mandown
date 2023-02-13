@@ -51,7 +51,7 @@ from tools.load import LoadImages, LoadStreams, IMG_FORMATS, VID_FORMATS, load_y
 from tools.save import SaveInfo
 
 # Parameters:
-source = ROOT / 'data/videos/test2.mp4'  # file/dir/URL/glob/screen/0(webcam)
+source = ROOT / 'data/videos/vid1.mp4'  # file/dir/URL/glob/screen/0(webcam)
 yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x1_0_market1501.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
