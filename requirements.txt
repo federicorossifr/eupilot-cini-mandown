@@ -15,5 +15,5 @@ protobuf==3.19.6
 # onnx-graphsurgeon
 # onnxoptimizer
 
-# NVIDIA GPUs analysis
-pynvml>=11.4.1
+# Uncomment for NVIDIA GPU analysis
+# pynvml>=11.4.1
