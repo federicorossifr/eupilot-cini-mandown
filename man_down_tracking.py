@@ -86,7 +86,6 @@ save_dir.mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector:
 device = select_device(device)
-device = 'cpu'
 model = DetectMultiBackend(yolo_weights, device = device, data = classes_path, fp16 = half)
 stride, names = model.stride, model.names
 pt, onnx, engine = model.pt, model.onnx, model.engine

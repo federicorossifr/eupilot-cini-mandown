@@ -108,15 +108,12 @@ class SaveInfo:
 
         system = platform.system()
         print("System: ", system)
-        CPU_name = platform.machine()
+        CPU_architecture = platform.machine()
         CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
-        if system != 'Windows':
-            CPU_temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
-        else:
-            CPU_temperature = 0.0
+        CPU_temperature = 0.0  # get CPU temperature in °C
         CPU_power_consumption = 0.0  # get CPU power consumption in W
 
-        print(f"""CPU properties: Name {CPU_name} Temperature: {CPU_temperature} °C Power Consumption: {CPU_power_consumption:.1f} W""")
+        print(f"""\033[1mCPU properties\033[0m: Architecture: {CPU_architecture} Utilization Rate: {CPU_utilization_rate} Temperature: {CPU_temperature} °C Power Consumption: {CPU_power_consumption} W""")
 
         if str(self.device) != 'cpu':
             print("NVIDIA GPU found, run NVIDIA management library and get GPU informations...")
@@ -131,7 +128,7 @@ class SaveInfo:
             GPU_temperature = pynvml.nvmlDeviceGetTemperature(self.index, self.NVML_TEMPERATURE_GPU)  # get GPU temperature in °C
             GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
-            print(f"""GPU properties: Name {GPU_name} Device Index: {GPU_id} Total Memory: {GPU_total_memory:.0f} MiB Temperature: {GPU_temperature} °C Power Consumption: {GPU_power_consumption:.1f} W""")
+            print(f"""\033[1mGPU properties\033[0m: Name {GPU_name} Device Index: {GPU_id} Total Memory: {GPU_total_memory:.0f} MiB Temperature: {GPU_temperature} °C Power Consumption: {GPU_power_consumption:.1f} W""")
 
     def get_speed_informations(self, dt):
 
