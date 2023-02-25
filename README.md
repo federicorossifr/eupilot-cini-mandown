@@ -27,7 +27,7 @@ Then, clone and install the official YOLOv5 repository using the following comma
 cd eupilot-cini-mandown
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
-git checkout tags/v6.2 # checkout at tag 6.2
+git checkout tags/v6.2  # checkout at tag 6.2
 pip install -r requirements.txt  # install
 ```
 Finally, install requirements using the following commands:
@@ -35,7 +35,7 @@ Finally, install requirements using the following commands:
 cd ..
 pip install -r requirements.txt  # install
 ```
-Execute code:
+**Execute code**:
 ```
 python man_down_tracking.py
 ```
