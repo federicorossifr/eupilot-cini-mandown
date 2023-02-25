@@ -64,11 +64,12 @@ Weights:
 
 All the tests are made using YOLOv5x model and OSNet x1.0 model.
    
-platform 1: **ARM Cortex-A72**  
+platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)  
 platform 2: **ARM Neoverse N1**  
-platform 3: **Fujitsu A64FX** (ARMv8-A based)   
-platform 4: **Intel i7-10750H**     
-platform 5: **Intel Xeon**   
+platform 3: **Fujitsu A64FX** (ARMv8-A based)  
+platform 4: **Intel i7-10750H**   
+platform 5: **Intel Xeon**  
+platform 6: **NVIDIA Jetson AGX Orin**  
 platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
 platform 7: **Intel Xeon with NVIDIA Tesla T4**  
 platform 8: **Intel Xeon with NVIDIA A100**  
@@ -76,13 +77,14 @@ platform 8: **Intel Xeon with NVIDIA A100**
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | 0.1 | **7632** | 1.2 | **1032** | 81.9 | - | - | - |
-| 2 | 0.2 | **878** | 0.5 | **3794** | 51.6 | - | - | - | 
+| 2 | 0.2 | **878** | 0.5 | **3794** | 51.6 | - | - | - |
 | 3 | 0.4 | **1221** | 1.1 | **1233** | - | - | - | - |
 | 4 | 1.0 | **794** | 0.3 | **200** | 95 | - | - | - |
-| 5 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |
-| 6 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.7 | 38.2 |
-| 7 | 11.6 | **33.9** | 0.3 | **28.3** | - | - | 48.9 | 57.1 |
-| 8 | 16.3 | **16.2** | 0.3 | **25.3** | - | - | 30.8 | 44.4 |
+| 5 | 1.8 | **335** | 0.3 | **197** | - | - | - | - |  
+| 6 | 7.7 | **38.8** | 0.5 | **54.9** | - | - | - | - |
+| 7 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.7 | 38.2 |
+| 8 | 11.6 | **33.9** | 0.3 | **28.3** | - | - | 48.9 | 57.1 |
+| 9 | 16.3 | **16.2** | 0.3 | **25.3** | - | - | 30.8 | 44.4 |
 
 <p align = "center"><img width="600" src="fps.png"></p>
 
