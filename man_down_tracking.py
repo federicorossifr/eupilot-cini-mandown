@@ -16,7 +16,7 @@ Weights:
     yolov5s.onnx               # ONNX Runtime
     yolov5s.engine             # TensorRT
 
-Models Size:
+Models Sizes:
 
     'n'   # nano (3.9 MB)
     's'   # small (14.1 MB)
