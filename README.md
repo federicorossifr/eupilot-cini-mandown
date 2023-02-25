@@ -31,6 +31,7 @@ Then, clone and install the official YOLOv5 repository using the following comma
 cd eupilot-cini-mandown
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
+git checkout tags/v6.2 # checkout
 pip install -r requirements.txt  # install
 ```
 Finally, install requirements using the following commands:
@@ -46,10 +47,7 @@ python man_down_tracking.py
 Sources:
 
     0, 1, 2, ...                     # webcam
-    img.jpg                          # image
     vid.mp4                          # video
-    path/                            # directory
-    'path/*.jpg'                     # glob
     'https://youtu.be/Zgi9g1ksQHc'   # YouTube
     'rtsp://example.com/media.mp4'   # RTSP, RTMP, HTTP stream
 
@@ -58,6 +56,14 @@ Weights:
     yolov5s.pt                 # PyTorch
     yolov5s.onnx               # ONNX Runtime
     yolov5s.engine             # TensorRT
+
+Models Size:
+
+    'n'   # nano (3.9 MB)
+    's'   # small (14.1 MB)
+    'm'   # medium (40.8 MB)
+    'l'   # large (89.3 MB)
+    'x'   # extra large (166 MB)
 
 ***
 ## Benchmark
