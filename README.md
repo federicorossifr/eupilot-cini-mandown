@@ -70,9 +70,9 @@ platform 3: **Fujitsu A64FX** (ARMv8-A based)
 platform 4: **Intel i7-10750H**   
 platform 5: **Intel Xeon**  
 platform 6: **NVIDIA Jetson AGX Orin**  
-platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
-platform 7: **Intel Xeon with NVIDIA Tesla T4**  
-platform 8: **Intel Xeon with NVIDIA A100**  
+platform 7: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
+platform 8: **Intel Xeon with NVIDIA Tesla T4**  
+platform 9: **Intel Xeon with NVIDIA A100**  
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
