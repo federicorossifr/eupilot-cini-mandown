@@ -31,8 +31,8 @@ if str(ROOT / 'yolov5') not in sys.path:
 
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-import logging
-from tools.general import select_device, check_requirements, check_version, color_str
+from tools.general import check_version, check_requirements, select_device
+from tools.draw import color_str
 from deep_sort.reid.models import get_model_name, build_model
 from deep_sort.reid.reid_multibackend import load_pretrained_weights
 
