@@ -35,7 +35,7 @@ Finally, install requirements using the following commands:
 cd ..
 pip install -r requirements.txt  # install
 ```
-**Execute code**:
+**Execute algorithm**:
 ```
 python man_down_tracking.py
 ```
@@ -53,7 +53,7 @@ Weights:
     yolov5s.onnx               # ONNX Runtime
     yolov5s.engine             # TensorRT
 
-Models Size:
+Models Sizes:
 
     'n'   # nano (3.9 MB)
     's'   # small (14.1 MB)
