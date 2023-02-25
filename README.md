@@ -11,12 +11,8 @@ Algorithm inputs:
 - Re-Identification model weights (such as 'osnet_x1_0_market1501.pt', 'osnet_x0_75_market1501.pt', 'osnet_x0_25_market1501.pt', etc...)
 - Source path (path of the video file that sould be process)
 
-Algoritm outputs:
+Algorithm outputs:
 - Folder that contains video/videos processed
-
-Formats accepted:
-- IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp'
-- VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'
 
 ***
 
@@ -31,7 +27,7 @@ Then, clone and install the official YOLOv5 repository using the following comma
 cd eupilot-cini-mandown
 git clone https://github.com/ultralytics/yolov5  # clone
 cd yolov5
-git checkout tags/v6.2 # checkout
+git checkout tags/v6.2 # checkout at tag 6.2
 pip install -r requirements.txt  # install
 ```
 Finally, install requirements using the following commands:
