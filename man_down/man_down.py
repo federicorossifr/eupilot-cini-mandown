@@ -1,7 +1,7 @@
-'''Man Down Classifier'''
+# Man Down Tracking 🚀
 
 import numpy as np
-from tools.general import xyxy2xywh, scale_boxes
+from tools.general import xyxy2xywh, scale_coords
 
 class ManDown:
 
@@ -10,12 +10,13 @@ class ManDown:
         self.ratio_thres = ratio_thres
         self.fp16 = fp16
 
-    def classify(self, img, img0, det):
+    def process_image(self, img, img0, det):
 
-        xyxys = det[:, :4].detach().numpy()  # bounding boxes in xyxy form (NumPy array on CPU)
+        xyxys = det[:, :4].detach().numpy()  # boundissh.hca.bsc.esng boxes in xyxy form (NumPy array on CPU)
         scores = det[:, 4].detach().numpy()  # scores (NumPy array on CPU)
         classes = det[:, 5].detach().numpy()  # classes IDs (NumPy array on CPU)
-        xyxys = scale_boxes(img.shape[2:], xyxys, img0.shape).round()  # rescale boxes to the original image shape
+        xyxys = scale_coords(img.shape[2:], xyxys, img0.shape).round()
+        # xyxys = scale_boxes(img.shape[2:], xyxys, img0.shape).round()  # rescale boxes to the original image shape
         xywhs = xyxy2xywh(xyxys)  # convert bounding boxes from xyxy to xywh form
         output = []
 

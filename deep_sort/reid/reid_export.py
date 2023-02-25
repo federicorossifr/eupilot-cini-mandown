@@ -32,9 +32,7 @@ if str(ROOT / 'yolov5') not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 import logging
-from tools.general import select_device, check_requirements, check_version, colorstr
-# from yolov5.utils import TryExcept, emojis
-# from yolov5.utils.general import LOGGER
+from tools.general import select_device, check_requirements, check_version, color_str
 from deep_sort.reid.models import get_model_name, build_model
 from deep_sort.reid.reid_multibackend import load_pretrained_weights
 
@@ -61,7 +59,7 @@ def export_formats():
     return pd.DataFrame(x, columns=['Format', 'Argument', 'Suffix', 'CPU', 'GPU'])
 
 
-def export_torchscript(model, im, file, optimize, prefix=colorstr('TorchScript:')):
+def export_torchscript(model, im, file, optimize, prefix=color_str('TorchScript:')):
     # YOLOv5 TorchScript model export
     try:
         print(f'\n{prefix} starting export with torch {torch.__version__}...')
@@ -79,7 +77,7 @@ def export_torchscript(model, im, file, optimize, prefix=colorstr('TorchScript:'
         print(f'{prefix} export failure: {e}')
 
 
-def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr('ONNX:')):
+def export_onnx(model, im, file, opset, dynamic, simplify, prefix=color_str('ONNX:')):
     # ONNX export
     try:
         check_requirements(('onnx',))
@@ -126,7 +124,7 @@ def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr('ONNX
     except Exception as e:
         print(f'export failure: {e}')
         
-def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose=False, prefix=colorstr('TensorRT:')):
+def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose=False, prefix=color_str('TensorRT:')):
     # YOLOv5 TensorRT export https://developer.nvidia.com/tensorrt
     try:
         assert im.device.type != 'cpu', 'export running on CPU but must be on GPU, i.e. `python export.py --device 0`'
@@ -246,7 +244,7 @@ if __name__ == "__main__":
     if args.half:
         im, model = im.half(), model.half()  # to FP16
     shape = tuple((y[0] if isinstance(y, tuple) else y).shape)  # model output shape
-    print(f"\n{colorstr('PyTorch:')} starting from {args.weights} with output shape {shape} ({file_size(args.weights):.1f} MB)")
+    print(f"\n{color_str('PyTorch:')} starting from {args.weights} with output shape {shape} ({file_size(args.weights):.1f} MB)")
     
     # Exports
     f = [''] * len(fmts)  # exported filenames
@@ -261,5 +259,5 @@ if __name__ == "__main__":
     f = [str(x) for x in f if x]  # filter out '' and None
     if any(f):
         print(f'\nExport complete ({time.time() - t:.1f}s)'
-                    f"\nResults saved to {colorstr('bold', args.weights.parent.resolve())}"
+                    f"\nResults saved to {color_str('bold', args.weights.parent.resolve())}"
                     f"\nVisualize:       https://netron.app")

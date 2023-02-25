@@ -57,8 +57,7 @@ from tools.draw import Annotator, colors, color_str
 from tools.save import SaveInfo
 
 # Parameters:
-source = ROOT / 'data/videos/test1.mp4'  # file/dir/URL/glob/screen/0(webcam)
-source = ROOT / 'data/videos/test1.mp4'
+source = ROOT / 'data/videos/vid1.mp4'  # file/dir/URL/glob/screen/0(webcam)
 yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x1_0_market1501.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
