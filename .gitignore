@@ -4,9 +4,14 @@ plots.py
 test.py
 
 # folders
-__pycache__
 yolov5
 weights
 data/images
 data/videos
 results
+
+# cache folders:
+__pycache__
+deep_sort/__pycache__
+man_down/__pycache__
+tools/__pycache__
