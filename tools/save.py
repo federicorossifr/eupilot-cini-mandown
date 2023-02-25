@@ -1,100 +1,71 @@
+# Man Down Tracking 🚀
 
 import platform
 import time
 import math
+import torch
 import psutil
-import pynvml
+
+if torch.cuda.is_available():
+    import pynvml
+
+from tools.general import color_str
 
 def get_CPU_informations():
 
-    #ToDo
+    #ToDo:
     return None
 
-def get_GPU_informations():
+def get_GPU_informations(N):
 
-    pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
-    index = pynvml.nvmlDeviceGetHandleByIndex(0)
-    NVML_TEMPERATURE_GPU = 0
+    if torch.cuda.is_available():
+        pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
+        index = pynvml.nvmlDeviceGetHandleByIndex(0)
 
-    # Conversion factors:
-    B_to_MiB = 1048576  # conversion factor from Bytes to Mebibyte (2^20)
-    mW_to_W = 1000  # conversion factor from milliWatt to Watt 
+        B_to_MiB = 1048576  # conversion factor from Bytes to Mebibyte (2^20)
+        mW_to_W = 1000  # conversion factor from milliWatt to Watt 
 
-    GPU_name = str(pynvml.nvmlDeviceGetName(index)).replace("b", "")  # get GPU name
-    GPU_id = pynvml.nvmlDeviceGetIndex(index)  # get GPU ID
-    GPU_total_memory = pynvml.nvmlDeviceGetMemoryInfo(index).total/B_to_MiB  # get total GPU memory in MebiBytes
-    GPU_used_memory = pynvml.nvmlDeviceGetMemoryInfo(index).used/B_to_MiB  # get used GPU memory in MebiBytes
-    GPU_free_memory = pynvml.nvmlDeviceGetMemoryInfo(index).free/B_to_MiB  # get free GPU memory in MebiBytes
-    GPU_utilization_rate = pynvml.nvmlDeviceGetUtilizationRates(index).gpu  # get GPU utilization rate in %
+        GPU_name = str(pynvml.nvmlDeviceGetName(index)).replace("b", "")  # get GPU name
+        GPU_id = pynvml.nvmlDeviceGetIndex(index)  # get GPU ID
+        GPU_total_memory = pynvml.nvmlDeviceGetMemoryInfo(index).total/B_to_MiB  # get total GPU memory in MebiBytes
+        GPU_used_memory = pynvml.nvmlDeviceGetMemoryInfo(index).used/B_to_MiB  # get used GPU memory in MebiBytes
+        GPU_free_memory = pynvml.nvmlDeviceGetMemoryInfo(index).free/B_to_MiB  # get free GPU memory in MebiBytes
+        GPU_utilization_rate = pynvml.nvmlDeviceGetUtilizationRates(index).gpu  # get GPU utilization rate in %
 
-    print(f"""GPU properties: 
-    Name: {GPU_name} 
-    Device Index: {GPU_id} 
-    Total Memory: {GPU_total_memory:.0f} MiB 
-    Used Memory: {GPU_used_memory} MiB 
-    Free Memory: {GPU_free_memory} MiB 
-    Utilization Rate: {GPU_utilization_rate} % 
-    """)
-    
-    N_measures = 500
-    T_meas = []
-    P_meas = []
-    x0 = []
-    x2 = []
-    
-    i = 0
+        print(f"{color_str('bold', 'blue', 'GPU properties:')} Name: {GPU_name} | Device Index: {GPU_id} | Total Memory: {GPU_total_memory:.0f} MiB | Utilization Rate: {GPU_utilization_rate} %\n")
 
-    while(i < N_measures):
+        T, PC, x0, x2, i = [], [], [], [], 0
 
-        print("Measure Number: ", i+1)
+        while(i < N):
 
-        GPU_temperature = pynvml.nvmlDeviceGetTemperature(index, NVML_TEMPERATURE_GPU)  # get GPU temperature in °C
-        GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(index)/mW_to_W  # get GPU power consumption in W
-        print(f"""Temperature": {GPU_temperature} °C""")
-        print(f"""Power Consumption: {GPU_power_consumption:.1f} W""")
+            print(f"{color_str('bold', 'white', 'Measure Number:')} {i+1}")
 
-        # Temperature
-        T_meas.append(GPU_temperature)
-        N_Temp = len(T_meas)
-        sum_Temp = sum(T_meas)
-        mean_Temp = sum_Temp/N_Temp
-        T_max = max(T_meas)
-        T_min = min(T_meas)
-        print(T_meas)
-        print("Temperature Mean: ", mean_Temp)
-        print("Max Temperature: ", T_max)
-        print("Min Temperature: ", T_min)
+            # Temperature:
+            temperature = pynvml.nvmlDeviceGetTemperature(index, 0)  # get GPU temperature in °C
+            T.append(temperature)
+            temperature_mean = sum(T)/len(T)
+            x0.append((temperature - temperature_mean)*(temperature - temperature_mean))
+            x1 = sum(x0)
+            temperature_variance = x1/len(T)
+            temperature_std_dev = math.sqrt(temperature_variance)
+            print(f'Temperature Current Measure: {temperature} °C')
+            print(f'Temperature Mean: {temperature_mean} °C')
+            print(f'Temperature Standard Deviation: {temperature_std_dev} °C')
 
-        x0.append((GPU_temperature - mean_Temp)*(GPU_temperature - mean_Temp))
-        x1 = sum(x0)
-        variance_Temp = x1/N_Temp
-        std_dev_Temp = math.sqrt(variance_Temp)
-        print("Temperature Variance: ", variance_Temp)
-        print("Temperature Standard Deviation: ", std_dev_Temp)
+            # Power Consumption:
+            power_consumption = pynvml.nvmlDeviceGetPowerUsage(index)/mW_to_W  # get GPU power consumption in W
+            PC.append(power_consumption)
+            power_consumption_mean = sum(PC)/len(PC)
+            x2.append((power_consumption - power_consumption_mean)*(power_consumption - power_consumption_mean))
+            x3 = sum(x2)
+            power_consumption_variance = x3/len(PC)
+            power_consumption_std_dev = math.sqrt(power_consumption_variance)
+            print(f'Power Consumption Current Measure: {power_consumption} W')
+            print(f'Power Consumption Mean: {power_consumption_mean} W')
+            print(f'Power Consumption Standard Deviation: {power_consumption_std_dev} W \n')
 
-        # Power Consumption
-        P_meas.append(GPU_power_consumption)
-        N_Power = len(P_meas)
-        sum_Power = sum(P_meas)
-        mean_Power = sum_Power/N_Power
-        P_max = max(P_meas)
-        P_min = min(P_meas)
-        print(P_meas)
-        print("Power Consumption Mean: ", mean_Power)
-        print("Max Power Consumption: ", P_max)
-        print("Min Power Consumption: ", P_min)
-
-        x2.append((GPU_power_consumption - mean_Power)*(GPU_power_consumption - mean_Power))
-        x3 = sum(x2)
-        variance_Power = x3/N_Power
-        std_dev_Power = math.sqrt(variance_Power)
-        print("Power Consumption Variance: ", variance_Power)
-        print("Power Consumption Standard Deviation: ", std_dev_Power)
-
-        i = i+1
-        time.sleep(3)
-
-        print(" ")
+            i += 1
+            time.sleep(3)
 
 class SaveInfo:
 
@@ -103,20 +74,16 @@ class SaveInfo:
         self.write_info = True
         self.save_dir = save_dir
         self.device = device
-        
-        print("Get CPU informations...")
 
-        system = platform.system()
-        print("System: ", system)
+        CPU_name = platform.processor()
         CPU_architecture = platform.machine()
         CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
         CPU_temperature = 0.0  # get CPU temperature in °C
         CPU_power_consumption = 0.0  # get CPU power consumption in W
 
-        print(f"""\033[1mCPU properties\033[0m: Architecture: {CPU_architecture} Utilization Rate: {CPU_utilization_rate} Temperature: {CPU_temperature} °C Power Consumption: {CPU_power_consumption} W""")
+        print(f"{color_str('bold', 'red', 'CPU properties:')} Name: {CPU_name} | Architecture: {CPU_architecture} | Utilization Rate: {CPU_utilization_rate} % | Temperature: {CPU_temperature} °C | Power Consumption: {CPU_power_consumption} W")
 
         if str(self.device) != 'cpu':
-            print("NVIDIA GPU found, run NVIDIA management library and get GPU informations...")
             pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
             self.index = pynvml.nvmlDeviceGetHandleByIndex(0)
             self.B_to_MiB = 1048576  # conversion factor from Bytes to Mebibyte (2^20)
@@ -128,7 +95,7 @@ class SaveInfo:
             GPU_temperature = pynvml.nvmlDeviceGetTemperature(self.index, self.NVML_TEMPERATURE_GPU)  # get GPU temperature in °C
             GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
-            print(f"""\033[1mGPU properties\033[0m: Name {GPU_name} Device Index: {GPU_id} Total Memory: {GPU_total_memory:.0f} MiB Temperature: {GPU_temperature} °C Power Consumption: {GPU_power_consumption:.1f} W""")
+            print(f"{color_str('bold', 'blue', 'GPU properties:')} Name: {GPU_name} | Device Index: {GPU_id} | Total Memory: {GPU_total_memory:.0f} MiB | Temperature: {GPU_temperature} °C | Power Consumption: {GPU_power_consumption:.1f} W")
 
     def get_speed_informations(self, dt):
 

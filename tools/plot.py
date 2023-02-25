@@ -1,8 +1,9 @@
+# Man Down Tracking 🚀
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-class ShowSpeed:
+class PlotSpeed:
 
     def __init__(self, file_path):
 
@@ -69,7 +70,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 300)
+        plt.ylim(0, max(y) + 10)
         plt.savefig(str(save_path) + '/Inference Speed')
 
     def post_process_average_speed(self):
@@ -89,7 +90,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 3)
+        plt.ylim(0, max(y) + 1)
         plt.savefig(str(save_path) + '/Post-Process Speed')
 
     def man_down_average_speed(self):
@@ -109,7 +110,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 0.3)
+        plt.ylim(0, max(y) + 0.5)
         plt.savefig(str(save_path) + '/Man Down Classifier Speed')
 
     def deep_sort_average_speed(self):
@@ -129,7 +130,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 10)
         plt.savefig(str(save_path) + '/DeepSORT Speed')
 
     def algorithm_average_speed(self):
@@ -159,7 +160,7 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 300)
+        plt.ylim(0, max(y) + 20)
         plt.savefig(str(save_path) + '/Algorithm Speed')
 
     def speed_plot(self, save_path):
@@ -182,11 +183,11 @@ class ShowSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(self.algorithm_speed) + 100)
+        plt.ylim(0, max(self.algorithm_speed) + 10)
         # plt.legend()
         plt.savefig(str(save_path) + '/Speed')
 
-class ShowCPU:
+class PlotInfoCPU:
 
     def __init__(self, file_path):
 
@@ -222,14 +223,20 @@ class ShowCPU:
         
         x = self.x
         y = self.CPU_utilization_rate
+        i = 0
+        z = []
+        while i < len(x):
+            z.append(100)
+            i += 1
         plt.figure(num = 8)
         plt.plot(x, y)
+        plt.plot(x, z, color = (1.0, 0.0, 0.0), linewidth = 0.5)
         plt.grid(visible = True, linewidth = 0.5)
         plt.title('CPU Utilization Rate')
         plt.xlabel('Frame [N]')
         plt.ylabel('Utilization Rate [%]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, 120)
         plt.savefig(str(save_path) + '/CPU Utilization Rate')
 
     def CPU_average_temperature(self):
@@ -282,7 +289,7 @@ class ShowCPU:
         plt.legend()
         plt.savefig(str(save_path) + '/CPU Power Consumption')
 
-class ShowGPU:
+class PlotInfoGPU:
 
     def __init__(self, file_path):
 
@@ -320,14 +327,20 @@ class ShowGPU:
         
         x = self.x
         y = self.GPU_utilization_rate
+        i = 0
+        z = []
+        while i < len(x):
+            z.append(100)
+            i += 1
         plt.figure(num = 11)
         plt.plot(x, y)
+        plt.plot(x, z, color = (1.0, 0.0, 0.0), linewidth = 0.5)
         plt.grid(visible = True, linewidth = 0.5)
         plt.title('GPU Utilization Rate')
         plt.xlabel('Frame [N]')
         plt.ylabel('Utilization Rate [%]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 15)
+        plt.ylim(0, 120)
         plt.savefig(str(save_path) + '/GPU Utilization Rate')
 
     def GPU_average_temperature(self):
