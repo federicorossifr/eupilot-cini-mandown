@@ -77,7 +77,7 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 
 **Legend**:  
 :turtle: --> execution on CPU  
-:rocket: --> execution on CPU and GPU
+:rocket: --> execution on CPU and GPU  
 NM --> Not Measured
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
