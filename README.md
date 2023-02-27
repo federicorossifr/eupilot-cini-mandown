@@ -75,7 +75,7 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 - platform 6 --> **Intel Xeon with NVIDIA Tesla T4**  
 - platform 7 --> **Intel Xeon with NVIDIA A100**   
 
-**Legend**:
+**Legend**:  
 :turtle: --> execution with CPU  
 :rocket: --> execution with CPU and GPU
 
