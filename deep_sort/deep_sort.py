@@ -1,5 +1,7 @@
+# Man Down Tracking 🚀
+
 """
-DeepSORT Algorithm
+Run the DeepSORT algorithm
 
 """
 
