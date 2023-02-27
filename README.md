@@ -76,8 +76,9 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 - platform 7 --> **Intel Xeon with NVIDIA A100**   
 
 **Legend**:  
-:turtle: --> execution with CPU  
-:rocket: --> execution with CPU and GPU
+:turtle: --> execution on CPU  
+:rocket: --> execution on CPU and GPU
+NM --> Not Measured
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -90,7 +91,7 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 | 5 (:rocket:) | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.7 | 38.2 |
 | 6 (:turtle:) | 1.8 | **336** | 0.3 | **197** | NM | NM | - | - |
 | 6 (:rocket:) | 11.7 | **33.9** | 0.3 | **28.3** | - | - | 48.9 | 57.1 |
-| 7 (:turtle:) | - | **-** | - | **-** | - | - | - | - |
+| 7 (:turtle:) | 2.0 | **328** | 0.3 | **191** | NM | NM | - | - |
 | 7 (:rocket:) | 16.3 | **16.2** | 0.3 | **25.3** | - | - | 30.8 | 44.4 |
 
 <p align = "center"><img width="600" src="fps.png"></p>
