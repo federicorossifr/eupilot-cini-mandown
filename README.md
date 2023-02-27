@@ -73,22 +73,24 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 - platform 4 --> **NVIDIA Jetson AGX Orin**  
 - platform 5 --> **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
 - platform 6 --> **Intel Xeon with NVIDIA Tesla T4**  
-- platform 7 --> **Intel Xeon with NVIDIA A100**  
-- platform 8 --> ...
+- platform 7 --> **Intel Xeon with NVIDIA A100**   
+
+execution only on CPU  
+:rocket: execution on CPU and GPU  
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | 0.1 | **7632** | 1.2 | **1032** | 81.9 | NM | - | - |
 | 2 | 0.2 | **878** | 0.5 | **3794** | 51.6 | NM | - | - |
 | 3 | 0.4 | **1221** | 1.1 | **1233** | NM | NM | - | - |
-| 4 (CPU) | - | **2084** | 0.5 | **18155** | 58.2 | 16.8 | - | - |
-| 4 (CPU + GPU) | 7.7 | **38.8** | 0.5 | **54.9** | - | - | 47 | 16 |
-| 5 (CPU) | 1.0 | **794** | 0.3 | **200** | 95 | NM | - | - |
-| 5 (CPU + GPU) | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.7 | 38.2 |
-| 6 (CPU) | 1.8 | **336** | 0.3 | **197** | NM | NM | - | - |
-| 6 (CPU + GPU) | 11.7 | **33.9** | 0.3 | **28.3** | - | - | 48.9 | 57.1 |
-| 7 (CPU) | - | **-** | - | **-** | - | - | - | - |
-| 7 (CPU + GPU) | 16.3 | **16.2** | 0.3 | **25.3** | - | - | 30.8 | 44.4 |
+| 4 | - | **2084** | 0.5 | **18155** | 58.2 | 16.8 | - | - |
+| 4 | 7.7 | **38.8** | 0.5 | **54.9** | - | - | 47 | 16 |
+| 5 | 1.0 | **794** | 0.3 | **200** | 95 | NM | - | - |
+| 5 | 6.5 | **82.9** | 0.3 | **37.9** | - | - | 74.7 | 38.2 |
+| 6 | 1.8 | **336** | 0.3 | **197** | NM | NM | - | - |
+| 6 | 11.7 | **33.9** | 0.3 | **28.3** | - | - | 48.9 | 57.1 |
+| 7 | - | **-** | - | **-** | - | - | - | - |
+| 7 | 16.3 | **16.2** | 0.3 | **25.3** | - | - | 30.8 | 44.4 |
 
 <p align = "center"><img width="600" src="fps.png"></p>
 
