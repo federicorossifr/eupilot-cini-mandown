@@ -1,40 +1,46 @@
+# Man Down Tracking 🚀
+
+"""
+Export a ReID model to other formats.
+
+Formats:
+
+    osnet_x1_0_market1501.pt           # PyTorch 
+    osnet_x1_0_market1501.onnx         # ONNX Runtime
+    osnet_x1_0_market1501.engine       # TensorRT
+
+Usage:
+
+    python path/to/reid_export.py --weights path/to/osnet_x1_0_market1501.pt --include engine --device 0
+
+"""
+
 import argparse
-
 import os
-# limit the number of cpus used by high performance libraries
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
-os.environ["NUMEXPR_NUM_THREADS"] = "1"
-
 import sys
-import numpy as np
 from pathlib import Path
 import torch
 import time
 import platform
 import pandas as pd
-import subprocess
-import torch.backends.cudnn as cudnn
-from torch.utils.mobile_optimizer import optimize_for_mobile
 
 FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0].parents[0]  # yolov5 strongsort root directory
+ROOT = FILE.parents[2]
 WEIGHTS = ROOT / 'weights'
-
 
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 if str(ROOT / 'yolov5') not in sys.path:
-    sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 ROOT to PATH
-
+    sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 directory to PATH
+if str(ROOT / 'deep_sort') not in sys.path:
+    sys.path.append(str(ROOT / 'deep_sort'))  # add deep_sort directory to PATH
+if str(ROOT / 'man_down') not in sys.path:
+    sys.path.append(str(ROOT / 'man_down'))  # add man_down directory to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from tools.general import check_version, check_requirements, select_device
-from tools.draw import color_str
-from deep_sort.reid.models import get_model_name, build_model
-from deep_sort.reid.reid_multibackend import load_pretrained_weights
+from deep_sort.reid.models import build_model, get_model_name
+from tools.general import check_requirements, check_version, select_device, color_str
+from tools.load import load_pretrained_weights
 
 
 def file_size(path):
@@ -49,32 +55,26 @@ def file_size(path):
 
 
 def export_formats():
-    # YOLOv5 export formats
+    # ReID export formats
     x = [
         ['PyTorch', '-', '.pt', True, True],
         ['TorchScript', 'torchscript', '.torchscript', True, True],
         ['ONNX', 'onnx', '.onnx', True, True],
+        ['OpenVINO', 'openvino', '_openvino_model', True, False],
         ['TensorRT', 'engine', '.engine', False, True],
+        ['TensorFlow Lite', 'tflite', '.tflite', True, False],
     ]
     return pd.DataFrame(x, columns=['Format', 'Argument', 'Suffix', 'CPU', 'GPU'])
 
 
-def export_torchscript(model, im, file, optimize, prefix=color_str('TorchScript:')):
-    # YOLOv5 TorchScript model export
-    try:
-        print(f'\n{prefix} starting export with torch {torch.__version__}...')
-        f = file.with_suffix('.torchscript')
-
-        ts = torch.jit.trace(model, im, strict=False)
-        if optimize:  # https://pytorch.org/tutorials/recipes/mobile_interpreter.html
-            optimize_for_mobile(ts)._save_for_lite_interpreter(str(f))
-        else:
-            ts.save(str(f))
-
-        print(f'{prefix} export success, saved as {f} ({file_size(f):.1f} MB)')
-        return f
-    except Exception as e:
-        print(f'{prefix} export failure: {e}')
+def export_formats_execution():
+    # ReID export formats
+    x = [
+        ['PyTorch', '-', '.pt', True, True],
+        ['ONNX', 'onnx', '.onnx', True, True],
+        ['TensorRT', 'engine', '.engine', False, True],
+    ]
+    return pd.DataFrame(x, columns=['Format', 'Argument', 'Suffix', 'CPU', 'GPU'])
 
 
 def export_onnx(model, im, file, opset, dynamic, simplify, prefix=color_str('ONNX:')):
@@ -124,6 +124,7 @@ def export_onnx(model, im, file, opset, dynamic, simplify, prefix=color_str('ONN
     except Exception as e:
         print(f'export failure: {e}')
         
+
 def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose=False, prefix=color_str('TensorRT:')):
     # YOLOv5 TensorRT export https://developer.nvidia.com/tensorrt
     try:
@@ -188,8 +189,8 @@ def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose
         return f
     except Exception as e:
         print(f'\n{prefix} export failure: {e}')
-        
-        
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="ReID export")
@@ -204,10 +205,7 @@ if __name__ == "__main__":
     parser.add_argument('--verbose', action='store_true', help='TensorRT: verbose log')
     parser.add_argument('--weights', nargs='+', type=str, default=WEIGHTS / 'osnet_x0_25_msmt17.pt', help='model.pt path(s)')
     parser.add_argument('--half', action='store_true', help='FP16 half-precision export')
-    parser.add_argument('--include',
-                        nargs='+',
-                        default=['torchscript'],
-                        help='torchscript, onnx, openvino, engine')
+    parser.add_argument('--include', nargs='+', default=['torchscript'], help='torchscript, onnx, openvino, engine')
     args = parser.parse_args()
 
     t = time.time()
@@ -225,7 +223,7 @@ if __name__ == "__main__":
     
     if type(args.weights) is list:
         args.weights = Path(args.weights[0])
-    
+
     model = build_model(
         get_model_name(args.weights),
         num_classes=1,
@@ -236,7 +234,7 @@ if __name__ == "__main__":
     model.eval()
 
     if args.optimize:
-        assert args.device.type == 'cpu', '--optimize not compatible with cuda devices, i.e. use --device cpu'
+        assert device.type == 'cpu', '--optimize not compatible with cuda devices, i.e. use --device cpu'
     
     im = torch.zeros(args.batch_size, 3, args.imgsz[0], args.imgsz[1]).to(args.device)  # image size(1,3,640,480) BCHW iDetection
     for _ in range(2):
@@ -248,12 +246,16 @@ if __name__ == "__main__":
     
     # Exports
     f = [''] * len(fmts)  # exported filenames
-    if jit:
-        f[0] = export_torchscript(model, im, args.weights, args.optimize)  # opset 12
+    # if jit:
+    #     f[0] = export_torchscript(model, im, args.weights, args.optimize)  # opset 12
     if engine:  # TensorRT required before ONNX
         f[1] = export_engine(model, im, args.weights, args.half, args.dynamic, args.simplify, args.workspace, args.verbose)
     if onnx:  # OpenVINO requires ONNX
         f[2] = export_onnx(model, im, args.weights, args.opset, args.dynamic, args.simplify)  # opset 12
+    # if openvino:
+    #     f[3] = export_openvino(args.weights, args.half)
+    # if tflite:
+    #     export_tflite(f, False)
 
     # Finish
     f = [str(x) for x in f if x]  # filter out '' and None
