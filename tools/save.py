@@ -6,17 +6,52 @@ import math
 import torch
 import psutil
 
+from tools.general import color_str
+
 if torch.cuda.is_available():
     import pynvml
 
-from tools.general import color_str
-
 def get_CPU_informations():
 
-    #ToDo:
-    return None
+    CPU_name = platform.processor()
+    CPU_architecture = platform.machine()
+    CPU_core_number = psutil.cpu_count()
+    CPU_frequency = psutil.cpu_freq().current
+    print(f"{color_str('bold', 'blue', 'CPU properties:')} Name: {CPU_name} | Architecture: {CPU_architecture} | Core Number: {CPU_core_number} | Frequency: {CPU_frequency} MHz \n")    
 
-def get_GPU_informations(N):
+    U, T, x0, i, N = [], [], [], 0, 500
+
+    while(i < N):
+
+        print(f"{color_str('bold', 'white', 'Measure Number:')} {i+1}")
+
+        # Utilization Rate:
+        utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
+        U.append(utilization_rate)
+        utilization_rate_mean = sum(U)/len(U)
+        print(f'Utilization Rate: {utilization_rate} %')
+        print(f'Utilization Rate Mean: {utilization_rate_mean} %')
+
+        if platform.system() != 'Windows' and psutil.sensors_temperatures() is not None:
+
+            # Temperature:
+            temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
+            T.append(temperature)
+            temperature_mean = sum(T)/len(T)
+            x0.append((temperature - temperature_mean)*(temperature - temperature_mean))
+            x1 = sum(x0)
+            temperature_variance = x1/len(T)
+            temperature_std_dev = math.sqrt(temperature_variance)
+            print(f'Temperature: {temperature} °C')
+            print(f'Temperature Mean: {temperature_mean} °C')
+            print(f'Temperature Standard Deviation: {temperature_std_dev} °C')
+
+        print('\n')
+
+        i += 1
+        time.sleep(3)
+
+def get_GPU_informations():
 
     if torch.cuda.is_available():
         pynvml.nvmlInit()  # initialize NVIDIA Management Library (NVML)
@@ -34,7 +69,7 @@ def get_GPU_informations(N):
 
         print(f"{color_str('bold', 'blue', 'GPU properties:')} Name: {GPU_name} | Device Index: {GPU_id} | Total Memory: {GPU_total_memory:.0f} MiB | Utilization Rate: {GPU_utilization_rate} %\n")
 
-        T, PC, x0, x2, i = [], [], [], [], 0
+        T, PC, x0, x2, i, N = [], [], [], [], 0, 500
 
         while(i < N):
 
@@ -48,7 +83,7 @@ def get_GPU_informations(N):
             x1 = sum(x0)
             temperature_variance = x1/len(T)
             temperature_std_dev = math.sqrt(temperature_variance)
-            print(f'Temperature Current Measure: {temperature} °C')
+            print(f'Temperature: {temperature} °C')
             print(f'Temperature Mean: {temperature_mean} °C')
             print(f'Temperature Standard Deviation: {temperature_std_dev} °C')
 
@@ -60,7 +95,7 @@ def get_GPU_informations(N):
             x3 = sum(x2)
             power_consumption_variance = x3/len(PC)
             power_consumption_std_dev = math.sqrt(power_consumption_variance)
-            print(f'Power Consumption Current Measure: {power_consumption} W')
+            print(f'Power Consumption: {power_consumption} W')
             print(f'Power Consumption Mean: {power_consumption_mean} W')
             print(f'Power Consumption Standard Deviation: {power_consumption_std_dev} W \n')
 

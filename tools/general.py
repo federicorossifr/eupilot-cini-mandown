@@ -4,7 +4,6 @@ import glob
 import math
 import os
 import platform
-import re
 import sys
 import time
 import urllib
