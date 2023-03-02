@@ -1,3 +1,5 @@
+# Man Down Tracking 🚀
+
 """
 Re-Identification Multi-Backend
 
@@ -22,9 +24,9 @@ class ReIDDetectMultiBackend(nn.Module):
         super().__init__()
 
         w = weights[0] if isinstance(weights, list) else weights
-        self.pt, self.jit, self.onnx, self.engine = self.model_type(w)  # get backend
+        self.pt, self.onnx, self.engine = self.model_type(w)  # get backend
         self.fp16 = fp16
-        self.fp16 &= self.pt or self.jit or self.engine  # FP16
+        self.fp16 &= self.pt or self.engine  # FP16
         self.device = device
 
         # Build transform functions
@@ -48,10 +50,6 @@ class ReIDDetectMultiBackend(nn.Module):
                 load_pretrained_weights(self.model, w)
             self.model.to(device).eval()
             self.model.half() if self.fp16 else self.model.float()
-        elif self.jit:
-            print(f'Loading {w} for TorchScript inference...')
-            self.model = torch.jit.load(w)
-            self.model.half() if self.fp16 else self.model.float()
         elif self.onnx:  # ONNX Runtime
             print(f'Loading {w} for ONNX Runtime inference...')
             cuda = torch.cuda.is_available() and device.type != 'cpu'
@@ -59,6 +57,13 @@ class ReIDDetectMultiBackend(nn.Module):
             import onnxruntime
             providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'] if cuda else ['CPUExecutionProvider']
             self.session = onnxruntime.InferenceSession(str(w), providers = providers)
+            self.input_name = self.session.get_inputs()[0].name
+            self.output_name = self.session.get_outputs()[0].name
+            meta = self.session.get_modelmeta().custom_metadata_map  # metadata
+            if 'stride' in meta:
+                stride = int(meta['stride'])
+            if 'names' in meta:
+                names = eval(meta['names'])
         elif self.engine:  # TensorRT
             print(f'Loading {w} for TensorRT inference...')
             import tensorrt as trt  # https://developer.nvidia.com/nvidia-tensorrt-download
@@ -86,14 +91,14 @@ class ReIDDetectMultiBackend(nn.Module):
                 im = torch.from_numpy(np.empty(shape, dtype=dtype)).to(device)
                 self.bindings[name] = Binding(name, dtype, shape, im, int(im.data_ptr()))
             self.binding_addrs = OrderedDict((n, d.ptr) for n, d in self.bindings.items())
-            batch_size = self.bindings['images'].shape[0]  # if dynamic, this is instead max batch size 
+            batch_size = self.bindings['images'].shape[0]  # if dynamic, this is instead max batch size
         else:
-            print("Framework not implemented...")
+            raise NotImplementedError(f'ERROR: {w} is not a supported format')
         
     def model_type(self, p = 'path/to/model.pt'):
         # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
-        from deep_sort.reid.reid_export import export_formats
-        sf = list(export_formats().Suffix)  # export suffixes
+        from deep_sort.reid.reid_export import export_formats_execution
+        sf = list(export_formats_execution().Suffix)  # export suffixes
         check_suffix(p, sf)  # checks
         p = Path(p).name  # eliminate trailing separators
         types = [s in Path(p).name for s in sf]
@@ -117,20 +122,18 @@ class ReIDDetectMultiBackend(nn.Module):
         # Pre-process batch:
         im_batch = self.pre_process(im_batch)
 
-        # Batch to half:
+        # Batch to fp16:
         if self.fp16 and im_batch.dtype != torch.float16:
            im_batch = im_batch.half()
 
         # Inference:
         features = []
-        if self.pt:
-            features = self.model(im_batch)
-        elif self.jit:  # TorchScript
+        if self.pt:  # PyTorch
             features = self.model(im_batch)
         elif self.onnx:  # ONNX Runtime
             im_batch = im_batch.cpu().numpy()  # torch to numpy
-            features = self.session.run([self.session.get_outputs()[0].name], {self.session.get_inputs()[0].name: im_batch})[0]
-        elif self.engine:  # TensorRT
+            features = self.session.run([self.output_name], {self.input_name: im_batch})[0]
+        else:  # TensorRT
             if True and im_batch.shape != self.bindings['images'].shape:
                 i_in, i_out = (self.model_.get_binding_index(x) for x in ('images', 'output'))
                 self.context.set_binding_shape(i_in, im_batch.shape)  # reshape if dynamic
@@ -141,8 +144,6 @@ class ReIDDetectMultiBackend(nn.Module):
             self.binding_addrs['images'] = int(im_batch.data_ptr())
             self.context.execute_v2(list(self.binding_addrs.values()))
             features = self.bindings['output'].data
-        else:
-            print("Framework not implemented...")
 
         if isinstance(features, (list, tuple)):
             return self.from_numpy(features[0]) if len(features) == 1 else [self.from_numpy(x) for x in features]
@@ -154,7 +155,7 @@ class ReIDDetectMultiBackend(nn.Module):
 
     def warmup(self, imgsz = [(256, 128, 3)]):
         # Warmup model by running inference once
-        warmup_types = self.pt, self.jit, self.onnx, self.engine, self.saved_model, self.pb
+        warmup_types = self.pt, self.onnx, self.engine
         if any(warmup_types) and self.device.type != 'cpu':
             im = [np.empty(*imgsz).astype(np.uint8)]  # input
             for _ in range(2 if self.jit else 1):
