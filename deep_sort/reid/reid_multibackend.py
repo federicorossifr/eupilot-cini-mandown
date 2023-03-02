@@ -7,7 +7,6 @@ Re-Identification Multi-Backend
 
 from pathlib import Path
 from collections import OrderedDict, namedtuple
-import cv2
 import numpy as np
 import torch
 import torch.nn as nn
