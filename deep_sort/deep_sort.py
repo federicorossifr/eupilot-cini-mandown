@@ -85,6 +85,7 @@ class DeepSORT(object):
         return bbox_tlwh
 
     def _xywh_to_xyxy(self, bbox_xywh):
+        
         x, y, w, h = bbox_xywh
         x1 = max(int(x - w / 2), 0)
         x2 = min(int(x + w / 2), self.width - 1)
@@ -111,8 +112,8 @@ class DeepSORT(object):
         self.tracker.increment_ages()
 
     def _xyxy_to_tlwh(self, bbox_xyxy):
-        x1, y1, x2, y2 = bbox_xyxy
 
+        x1, y1, x2, y2 = bbox_xyxy
         t = x1
         l = y1
         w = int(x2 - x1)
@@ -121,6 +122,7 @@ class DeepSORT(object):
         return t, l, w, h
 
     def _get_features(self, ori_img, bbox_xywh):
+
         im_crops = []
         for box in bbox_xywh:
             x1, y1, x2, y2 = self._xywh_to_xyxy(box)
