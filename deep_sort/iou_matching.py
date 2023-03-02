@@ -1,4 +1,3 @@
-'''IoU Matching'''
 
 import numpy as np
 from deep_sort import linear_assignment

@@ -1,4 +1,3 @@
-'''Nearest Neighbor Distance Metric'''
 
 import numpy as np
 

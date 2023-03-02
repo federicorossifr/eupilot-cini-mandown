@@ -38,7 +38,6 @@ class DeepSORT(object):
         # Get features with Re-Identification Model:
         features = self._get_features(img0, xywhs)
         bbox_tlwh = self._xywh_to_tlwh(xywhs)
-
         detections = [Detection(bbox_tlwh[i], score, features[i]) for i, score in enumerate(scores)]
 
         # Run on non-maximum supression:
