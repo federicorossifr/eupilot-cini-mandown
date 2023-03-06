@@ -57,7 +57,7 @@ from tools.draw import Annotator, colors, color_str
 from tools.save import SaveInfo
 
 # Parameters:
-source = ROOT / 'data/videos/vid1.mp4'  # file/dir/URL/glob/screen/0(webcam)
+source = ROOT / 'data/videos/vid2.mp4'  # file/dir/URL/glob/screen/0(webcam)
 yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x1_0_market1501.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
@@ -92,6 +92,7 @@ save_dir.mkdir(parents = True, exist_ok = True)  # make dir
 
 # Load Object Detector:
 device = select_device(device)
+device = torch.device('cpu')
 model = DetectMultiBackend(yolo_weights, device = device, data = classes_path, fp16 = half)
 stride, names = model.stride, model.names
 pt, onnx, engine = model.pt, model.onnx, model.engine

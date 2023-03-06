@@ -50,7 +50,7 @@ class PlotSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 1)
+        plt.ylim(0, max(y) + 0.5)
         plt.savefig(str(save_path) +'/Pre-Process Speed')
 
     def inference_average_speed(self):
@@ -70,7 +70,7 @@ class PlotSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 10)
+        plt.ylim(0, max(y) + 50)
         plt.savefig(str(save_path) + '/Inference Speed')
 
     def post_process_average_speed(self):
@@ -130,7 +130,7 @@ class PlotSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 10)
+        plt.ylim(0, max(y) + 30)
         plt.savefig(str(save_path) + '/DeepSORT Speed')
 
     def algorithm_average_speed(self):
@@ -160,7 +160,7 @@ class PlotSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(y) + 20)
+        plt.ylim(0, max(y) + 60)
         plt.savefig(str(save_path) + '/Algorithm Speed')
 
     def speed_plot(self, save_path):
@@ -183,7 +183,7 @@ class PlotSpeed:
         plt.xlabel('Frame [N]')
         plt.ylabel('Time [ms]')
         plt.xlim(0, self.N - 1)
-        plt.ylim(0, max(self.algorithm_speed) + 10)
+        plt.ylim(0, max(self.algorithm_speed) + 30)
         # plt.legend()
         plt.savefig(str(save_path) + '/Speed')
 

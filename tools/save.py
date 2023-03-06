@@ -16,7 +16,7 @@ def get_CPU_informations():
     CPU_name = platform.processor()
     CPU_architecture = platform.machine()
     CPU_core_number = psutil.cpu_count()
-    CPU_frequency = psutil.cpu_freq().current
+    CPU_frequency = round(psutil.cpu_freq().current, 2)
     print(f"{color_str('bold', 'blue', 'CPU properties:')} Name: {CPU_name} | Architecture: {CPU_architecture} | Core Number: {CPU_core_number} | Frequency: {CPU_frequency} MHz \n")    
 
     U, T, x0, i, N = [], [], [], 0, 500
@@ -32,7 +32,7 @@ def get_CPU_informations():
         print(f'Utilization Rate: {utilization_rate} %')
         print(f'Utilization Rate Mean: {utilization_rate_mean} %')
 
-        if platform.system() != 'Windows' and psutil.sensors_temperatures() is not None:
+        if platform.system() != 'Windows' and psutil.sensors_temperatures().get('') is not None:
 
             # Temperature:
             temperature = psutil.sensors_temperatures()  # get CPU temperature in °C
