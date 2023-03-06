@@ -78,21 +78,42 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 **Legend**:  
 :turtle: --> execution on CPU  
 :rocket: --> execution on CPU and GPU  
-NM --> Not Measured
+NM --> Not Available
 
-| Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | 0.1 | **7632** | 1.2 | **1032** | 82.0 | NM | - | - |
-| 2 | 0.2 | **879** | 0.6 | **3794** | 51.6 | NM | - | - |
-| 3 | 0.4 | **1221** | 1.1 | **1233** | NM | NM | - | - |
-| 4 (:turtle:) | 0.05 | **2084** | 0.5 | **18155** | 58.2 | 16.8 | - | - |
-| 4 (:rocket:) | 7.7 | **38.8** | 0.5 | **54.9** | 52.2 | 6.7 | 47.0 | 16.0 |
-| 5 (:turtle:) | 1.0 | **794** | 0.3 | **200** | 95 | NM | - | - |
-| 5 (:rocket:) | 6.5 | **82.9** | 0.3 | **37.9** | NM | NM | 74.7 | 38.2 |
-| 6 (:turtle:) | 1.8 | **336** | 0.3 | **197** | NM | NM | - | - |
-| 6 (:rocket:) | 11.7 | **33.9** | 0.3 | **28.3** | NM | NM | 48.9 | 57.1 |
-| 7 (:turtle:) | 2.0 | **328** | 0.3 | **191** | NM | NM | - | - |
-| 7 (:rocket:) | 16.3 | **16.2** | 0.3 | **25.3** | NM | NM | 30.8 | 44.4 |
+### **Speed results**   
+
+| Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) |
+|:-:|:-:|:-:|:-:|:-:|
+| 1 | 0.1 | 7632 | 1.2 | 1032 |
+| 2 | 0.2 | 879 | 0.6 | 3794 |
+| 3 | 0.4 | 1221 | 1.1 | 1233 |
+| 4 (:turtle:) | 0.05 | 2084 | 0.5 | 18155 |
+| 4 (:rocket:) | 7.7 | 38.8 | 0.5 | 54.9 |
+| 5 (:turtle:) | 1.0 | 807 | 0.2 | 207 |
+| 5 (:rocket:) | 7.3 | 85.4 | 0.3 | 11.9 |
+| 6 (:turtle:) | 1.8 | 335 | 0.3 | 197 |
+| 6 (:rocket:) | 12.8 | 37.8 | 0.3 | 15.1 |
+| 7 (:turtle:) | 3.8 | 153 | 0.4 | 97.5 |
+| 7 (:rocket:) | 21.3 | 10.9 | 0.3 | 13.9 |
+
+***
+
+### **Stats results**
+| Platform | CPU Utilization Rate <br>(%) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Utilization Rate <br>(%) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| 1 | 96.8 | 82.0 | NA | - | - | - |
+| 2 | 37.5 | 51.7 | NA | - | - | - |
+| 3 | 77.1 | NA | NA | - | - | - |
+| 4 (:turtle:) | 98.3 | 58.2 | 16.8 | - | - | - |
+| 4 (:rocket:) | 45.7 | 52.2 | 6.7 | 34.1 | 47.0 | 16.0 |
+| 5 (:turtle:) | 40.8 | 91.8 | 43.2 | - | - | - |
+| 5 (:rocket:) | 32.1 | 93.5 | 36.2 | 65.8 | 78.7 | 41.2 |
+| 6 (:turtle:) | 93.5 | NA | NA | - | - | - |
+| 6 (:rocket:) | 49 | NA | NA | 54.0 | 43.7 | 62.5 |
+| 7 (:turtle:) | 50.8 | 40.3 | NA | - | - | - |
+| 7 (:rocket:) | 25.9 | 32.3 | NA | 30.2 | 38.9 | 51.9 |
+
+***
 
 <p align = "center"><img width="600" src="fps.png"></p>
 
