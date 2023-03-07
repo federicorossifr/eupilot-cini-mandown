@@ -69,11 +69,12 @@ All the tests are made using YOLOv5x model and OSNet x1.0 model.
 **Platforms tested**:   
 - platform 1 --> **ARM Cortex-A72** (Raspberry Pi 4B)  
 - platform 2 --> **ARM Neoverse N1**  
-- platform 3 --> **Fujitsu A64FX** (ARMv8-A based)  
-- platform 4 --> **NVIDIA Jetson AGX Orin**  
-- platform 5 --> **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
-- platform 6 --> **Intel Xeon with NVIDIA Tesla T4**  
-- platform 7 --> **Intel Xeon with NVIDIA A100**   
+- platform 3 --> **Fujitsu A64FX** (ARMv8-A based)
+- platform 4 --> **BSC RISC-V** (Arriesgado-Ubuntu)  
+- platform 5 --> **NVIDIA Jetson AGX Orin**  
+- platform 6 --> **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
+- platform 7 --> **Intel Xeon with NVIDIA Tesla T4**  
+- platform 8 --> **Intel Xeon with NVIDIA A100**   
 
 **Legend**:  
 :turtle: --> execution on CPU  
@@ -87,14 +88,15 @@ NM --> Not Available
 | 1 | 0.1 | 7632 | 1.2 | 1032 |
 | 2 | 0.2 | 879 | 0.6 | 3794 |
 | 3 | 0.4 | 1221 | 1.1 | 1233 |
-| 4 (:turtle:) | 0.05 | 2084 | 0.5 | 18155 |
-| 4 (:rocket:) | 7.7 | 38.8 | 0.5 | 54.9 |
-| 5 (:turtle:) | 1.0 | 807 | 0.2 | 207 |
-| 5 (:rocket:) | 7.3 | 85.4 | 0.3 | 11.9 |
-| 6 (:turtle:) | 1.8 | 335 | 0.3 | 197 |
-| 6 (:rocket:) | 12.8 | 37.8 | 0.3 | 15.1 |
-| 7 (:turtle:) | 3.8 | 153 | 0.4 | 97.5 |
-| 7 (:rocket:) | 21.3 | 10.9 | 0.3 | 13.9 |
+| 4 | - | - | - | - |
+| 5 (:turtle:) | 0.05 | 2084 | 0.5 | 18155 |
+| 5 (:rocket:) | 7.7 | 38.8 | 0.5 | 54.9 |
+| 6 (:turtle:) | 1.0 | 807 | 0.2 | 207 |
+| 6 (:rocket:) | 7.3 | 85.4 | 0.3 | 11.9 |
+| 7 (:turtle:) | 1.8 | 335 | 0.3 | 197 |
+| 7 (:rocket:) | 12.8 | 37.8 | 0.3 | 15.1 |
+| 8 (:turtle:) | 3.8 | 153 | 0.4 | 97.5 |
+| 8 (:rocket:) | 21.3 | 10.9 | 0.3 | 13.9 |
 
 ***
 
@@ -104,14 +106,15 @@ NM --> Not Available
 | 1 | 96.8 | 82.0 | NA | - | - | - |
 | 2 | 37.5 | 51.7 | NA | - | - | - |
 | 3 | 77.1 | NA | NA | - | - | - |
-| 4 (:turtle:) | 98.3 | 58.2 | 16.8 | - | - | - |
-| 4 (:rocket:) | 45.7 | 52.2 | 6.7 | 34.1 | 47.0 | 16.0 |
-| 5 (:turtle:) | 40.8 | 91.8 | 43.2 | - | - | - |
-| 5 (:rocket:) | 32.1 | 93.5 | 36.2 | 65.8 | 78.7 | 41.2 |
-| 6 (:turtle:) | 93.5 | NA | NA | - | - | - |
-| 6 (:rocket:) | 49 | NA | NA | 54.0 | 43.7 | 62.5 |
-| 7 (:turtle:) | 50.8 | 40.3 | NA | - | - | - |
-| 7 (:rocket:) | 25.9 | 32.3 | NA | 30.2 | 38.9 | 51.9 |
+| 4 | - | - | - | - | - | - |
+| 5 (:turtle:) | 98.3 | 58.2 | 16.8 | - | - | - |
+| 5 (:rocket:) | 45.7 | 52.2 | 6.7 | 34.1 | 47.0 | 16.0 |
+| 6 (:turtle:) | 40.8 | 91.8 | 43.2 | - | - | - |
+| 6 (:rocket:) | 32.1 | 93.5 | 36.2 | 65.8 | 78.7 | 41.2 |
+| 7 (:turtle:) | 93.5 | NA | NA | - | - | - |
+| 7 (:rocket:) | 49 | NA | NA | 54.0 | 43.7 | 62.5 |
+| 8 (:turtle:) | 50.8 | 40.3 | NA | - | - | - |
+| 8 (:rocket:) | 25.9 | 32.3 | NA | 30.2 | 38.9 | 51.9 |
 
 ***
 
