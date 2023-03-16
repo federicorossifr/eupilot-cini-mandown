@@ -88,7 +88,7 @@ Three video test with different number of man down has been used to evaluate the
 :rocket:: Execution on CPU and GPU  
 **NA**: Not Available   
 
-### **Speed results**   
+### **Speed**   
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) |
 |:-:|:-:|:-:|:-:|:-:|
@@ -107,7 +107,7 @@ Three video test with different number of man down has been used to evaluate the
 
 ***
 
-### **Stats results**
+### **Stats**
 | Platform | CPU Utilization Rate <br>(%) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Utilization Rate <br>(%) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 | 96.8 | 82.0 | NA | - | - | - |
@@ -132,7 +132,7 @@ Three video test with different number of man down has been used to evaluate the
 
 <p align = "center"><img width="600" src="plots/deep_sort_speed.png"></p> -->
 
-- #### **Evaluation on ARM Neoverse N1**
+- **Evaluation on ARM Neoverse N1**
 
 <p align="center">
   <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="400" />
@@ -142,7 +142,7 @@ Three video test with different number of man down has been used to evaluate the
 <p align = "center"> <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_utilization.png" width="400" /> 
 
 
-- #### **Evaluation on Fujitsu A64FX**
+- **Evaluation on Fujitsu A64FX**
 
 <p align="center">
   <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_yolo_inference_speed.png" width="400" />
@@ -151,7 +151,7 @@ Three video test with different number of man down has been used to evaluate the
 
 <p align = "center"> <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_utilization.png" width="400" /> 
 
-- #### **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
+- **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
 
 ... 
 
