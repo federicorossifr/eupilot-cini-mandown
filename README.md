@@ -91,9 +91,9 @@ Three video test with different number of man down detected:
 - platform 8: **Intel Xeon with NVIDIA A100**   
 
 **Legend**  
-| :turtle: | :rocket: | NA |
-|:-:|:-:|:-:|
-| Execution on CPU | Execution on CPU and GPU | Not Available |
+:turtle:: Execution on CPU
+:rocket:: Execution on CPU and GPU 
+NA: Not Available
 
 ### **Speed results**   
 
