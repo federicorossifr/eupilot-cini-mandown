@@ -1,4 +1,4 @@
-<p align = "center"><img width="600" src="eupilot.png"></p>
+<p align = "center"><img width="400" src="eupilot.png"></p>
 
 # EuPilot CINI - Man Down Tracking
 
