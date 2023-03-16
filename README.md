@@ -66,9 +66,13 @@ Models Size:
 ***
 ## Algorithm evaluation
 
-Tests have been done using YOLOv5x model and OSNet x1.0 model.
+Tests have been conducted on different platforms using YOLOv5x model and OSNet x1.0 model.  
+Three video test with different number of man down detected:
+- **vid1.mp4**: 470 frames, 3 persons, 3 man down, images at 384x640
+- **vid2.mp4**: 437 frames, 2 persons, 2 man down, images at 384x640
+- **vid3.mp4**: 501 frames, 5 persons, 2 man down, images at 384x640
 
-**Platforms tested**:   
+**Platforms used**:   
 - platform 1 --> **ARM Cortex-A72** (Raspberry Pi 4B)  
 - platform 2 --> **ARM Neoverse N1**  
 - platform 3 --> **Fujitsu A64FX** (ARMv8-A based)
@@ -119,12 +123,23 @@ NA --> Not Available
 | 8 (:rocket:) | 25.9 | 32.3 | NA | 30.2 | 38.9 | 51.9 |
 
 ***
+### **Plots**
 
-<p align = "left"><img width="500" src="fps.png"></p>
+<!-- <p align = "left"><img width="500" src="plots/fps.png"></p>
 
-<p align = "right"><img width="600" src="yolo_inference_speed.png"></p>
+<p align = "right"><img width="600" src="plots/yolo_inference_speed.png"></p>
 
-<p align = "center"><img width="600" src="deep_sort_speed.png"></p>
+<p align = "center"><img width="600" src="plots/deep_sort_speed.png"></p> -->
+
+- **Evaluation on ARM Neoverse N1**
+
+<p float="left">
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="200" />
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_deep_sort_speed.png" width="200" /> 
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_utilization.png" width="200" />
+</p>
+
+<!-- #<p align = "left"><img width="400" src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png"> -->
 
 ***
 
