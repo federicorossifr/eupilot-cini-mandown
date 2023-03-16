@@ -72,7 +72,7 @@ Tests have been conducted on different platforms using YOLOv5x model and OSNet x
 Three video test with different number of man down has been used to evaluate the computation performance of the platforms:
 - **vid1.mp4**: 470 frames, 3 persons, 3 man down, images size of 384x640
 - **vid2.mp4**: 437 frames, 2 persons, 2 man down, images size of 384x640
-- **vid3.mp4**: 501 frames, 5 persons, 2 man down, images size of 384x640
+- **vid3.mp4**: 501 frames, 5 persons, 2 man down, images size of 384x640     
 
 **Platforms**   
 - platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
