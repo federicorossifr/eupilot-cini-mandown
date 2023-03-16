@@ -73,7 +73,7 @@ Three video test with different number of man down detected:
 - **vid2.mp4**: 437 frames, 2 persons, 2 man down, images at 384x640
 - **vid3.mp4**: 501 frames, 5 persons, 2 man down, images at 384x640
 
-**Platforms**:   
+**Platforms**   
 - platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
 
 - platform 2: **ARM Neoverse N1**
@@ -90,10 +90,10 @@ Three video test with different number of man down detected:
 
 - platform 8: **Intel Xeon with NVIDIA A100**   
 
-**Legend**:  
-:turtle: --> execution on CPU  
-:rocket: --> execution on CPU and GPU  
-NA --> Not Available
+**Legend**  
+:turtle: : execution on CPU  
+:rocket: : execution on CPU and GPU  
+NA: Not Available
 
 ### **Speed results**   
 
@@ -139,7 +139,7 @@ NA --> Not Available
 
 <p align = "center"><img width="600" src="plots/deep_sort_speed.png"></p> -->
 
-- **Evaluation on ARM Neoverse N1**
+- #### **Evaluation on ARM Neoverse N1**
 
 <p align="center">
   <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="400" />
@@ -149,7 +149,7 @@ NA --> Not Available
 <p align = "center"> <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_utilization.png" width="400" /> 
 
 
-- **Evaluation on Fujitsu A64FX**
+- #### **Evaluation on Fujitsu A64FX**
 
 <p align="center">
   <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_yolo_inference_speed.png" width="400" />
@@ -158,7 +158,7 @@ NA --> Not Available
 
 <p align = "center"> <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_utilization.png" width="400" /> 
 
-- **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
+- #### **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
 
 ... 
 
