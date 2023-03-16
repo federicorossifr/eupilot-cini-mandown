@@ -134,9 +134,9 @@ NA --> Not Available
 - **Evaluation on ARM Neoverse N1**
 
 <p float="left">
-  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="200" />
-  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_deep_sort_speed.png" width="200" /> 
-  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_utilization.png" width="200" />
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="400" />
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_deep_sort_speed.png" width="400" /> 
+  <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_utilization.png" width="400" />
 </p>
 
 <!-- #<p align = "left"><img width="400" src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png"> -->
