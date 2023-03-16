@@ -73,15 +73,22 @@ Three video test with different number of man down detected:
 - **vid2.mp4**: 437 frames, 2 persons, 2 man down, images at 384x640
 - **vid3.mp4**: 501 frames, 5 persons, 2 man down, images at 384x640
 
-**Platforms used**:   
-- platform 1 --> **ARM Cortex-A72** (Raspberry Pi 4B)  
-- platform 2 --> **ARM Neoverse N1**  
-- platform 3 --> **Fujitsu A64FX** (ARMv8-A based)
-- platform 4 --> **BSC RISC-V Arriesgado** (scalar)  
-- platform 5 --> **NVIDIA Jetson AGX Orin**  
-- platform 6 --> **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
-- platform 7 --> **Intel Xeon with NVIDIA Tesla T4**  
-- platform 8 --> **Intel Xeon with NVIDIA A100**   
+**Platforms**:   
+- platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
+
+- platform 2: **ARM Neoverse N1**
+
+- platform 3: **Fujitsu A64FX** (ARMv8-A based)
+
+- platform 4: **BSC RISC-V Arriesgado** (scalar)
+
+- platform 5: **NVIDIA Jetson AGX Orin**  
+
+- platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
+
+- platform 7: **Intel Xeon with NVIDIA Tesla T4**  
+
+- platform 8: **Intel Xeon with NVIDIA A100**   
 
 **Legend**:  
 :turtle: --> execution on CPU  
@@ -134,8 +141,6 @@ NA --> Not Available
 
 - **Evaluation on ARM Neoverse N1**
 
-2 sockets (80 cores each)
-
 <p align="center">
   <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_yolo_inference_speed.png" width="400" />
   <img src="plots/ARM Neoverse N1/ARM_Neoverse_N1_deep_sort_speed.png" width="400" /> 
@@ -146,8 +151,6 @@ NA --> Not Available
 
 - **Evaluation on Fujitsu A64FX**
 
-4 clusters (12 cores each)
-
 <p align="center">
   <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_yolo_inference_speed.png" width="400" />
   <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_deep_sort_speed.png" width="400" /> 
@@ -155,7 +158,7 @@ NA --> Not Available
 
 <p align = "center"> <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_utilization.png" width="400" /> 
 
-- **Evaluation on scalar BSC RISC-V (Arriesgado)**
+- **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
 
 ... 
 
