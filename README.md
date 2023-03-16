@@ -68,32 +68,25 @@ Models Size:
 ## Evaluation
 
 Tests have been conducted on different platforms using YOLOv5x model and OSNet x1.0 model.  
-Three video test with different number of man down detected:
-- **vid1.mp4**: 470 frames, 3 persons, 3 man down, images at 384x640
-- **vid2.mp4**: 437 frames, 2 persons, 2 man down, images at 384x640
-- **vid3.mp4**: 501 frames, 5 persons, 2 man down, images at 384x640
+Three video test with different number of man down has been used to evaluate the computation performance of the platforms:
+- **vid1.mp4**: 470 frames, 3 persons, 3 man down, images size of 384x640
+- **vid2.mp4**: 437 frames, 2 persons, 2 man down, images size of 384x640
+- **vid3.mp4**: 501 frames, 5 persons, 2 man down, images size of 384x640
 
 **Platforms**   
 - platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
-
 - platform 2: **ARM Neoverse N1**
-
 - platform 3: **Fujitsu A64FX** (ARMv8-A based)
-
 - platform 4: **BSC RISC-V Arriesgado** (scalar)
-
 - platform 5: **NVIDIA Jetson AGX Orin**  
-
 - platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
-
 - platform 7: **Intel Xeon with NVIDIA Tesla T4**  
-
 - platform 8: **Intel Xeon with NVIDIA A100**   
 
 **Legend**  
 :turtle:: Execution on CPU  
 :rocket:: Execution on CPU and GPU  
-NA: Not Available   
+**NA**: Not Available   
 
 ### **Speed results**   
 
