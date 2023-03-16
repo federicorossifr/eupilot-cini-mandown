@@ -84,7 +84,7 @@ Three video test with different number of man down has been used to evaluate the
 - platform 7: **Intel Xeon with NVIDIA Tesla T4**  
 - platform 8: **Intel Xeon with NVIDIA A100**   
 
-**Legend**  
+**Legend**   
 :turtle:: Execution on CPU  
 :rocket:: Execution on CPU and GPU  
 NA: Not Available   
