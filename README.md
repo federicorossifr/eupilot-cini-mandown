@@ -78,7 +78,7 @@ Three video test with different number of man down has been used to evaluate the
 - platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
 - platform 2: **ARM Neoverse N1**
 - platform 3: **Fujitsu A64FX** (ARMv8-A based)
-- platform 4: **BSC RISC-V Arriesgado** (scalar)
+- platform 4: **BSC RISC-V Arriesgado** (with scalar instructions)
 - platform 5: **NVIDIA Jetson AGX Orin**  
 - platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
 - platform 7: **Intel Xeon with NVIDIA Tesla T4**  
@@ -127,12 +127,6 @@ NA: Not Available
 ***
 ### **Plots**
 
-<!-- <p align = "left"><img width="500" src="plots/fps.png"></p>
-
-<p align = "right"><img width="600" src="plots/yolo_inference_speed.png"></p>
-
-<p align = "center"><img width="600" src="plots/deep_sort_speed.png"></p> -->
-
 - **Evaluation on ARM Neoverse N1**
 
 <p align="center">
@@ -152,7 +146,7 @@ NA: Not Available
 
 <p align = "center"> <img src="plots/Fujitsu A64FX/Fujitsu_A64FX_utilization.png" width="400" /> 
 
-- **Evaluation on scalar BSC RISC-V (Arriesgado platform)**
+- **Evaluation on BSC RISC-V Arriesgado platform with scalar instructions**
 
 ... 
 
