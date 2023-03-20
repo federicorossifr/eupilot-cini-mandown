@@ -127,12 +127,12 @@ NA: Not Available
 ***
 ### **Plots**
 
-#### **Comparison between the various platforms in terms of FPS** 
+- **Comparison between the various platforms in terms of FPS** 
 <p align="center">
-  <img src="plots/fps.png" width="1400" />
+  <img src="plots/fps.png" width="1600" />
 </p>
 
-#### **YOLO inference speed comparison between NVIDIA platforms**
+- **YOLO inference speed comparison executing on host or device for different NVIDIA platforms**
 <p align="center">
   <img src="plots/comparison_host_device.png" width="400" />
 </p>
