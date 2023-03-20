@@ -85,8 +85,8 @@ Three video test with different number of man down has been used to evaluate the
 - platform 8: **Intel Xeon with NVIDIA A100**   
 
 **Legend**   
-:turtle:: Execution on CPU  
-:rocket:: Execution on CPU and GPU  
+:turtle:: Execution on CPU (host)   
+:rocket:: Execution on CPU and GPU (device)   
 NA: Not Available   
 
 ### **Speed**   
@@ -127,14 +127,26 @@ NA: Not Available
 ***
 ### **Plots**
 
-- **Comparison between the various platforms in terms of FPS** 
+- **Comparison between different platforms in terms of FPS**
 <p align="center">
-  <img src="plots/fps.png" width="2000" />
+  <img src="plots/fps_comparison.png" width="2000" />
+</p>
+
+- **Comparison between different platforms in terms of YOLOv5 inference speed**
+<p align="center">
+  <img src="plots/yolo_inference_speed_comparison.png" width="2000" />
+</p>
+
+*Out of scale
+
+- **Comparison between different platforms in terms of DeepSORT algorithm execution speed**
+<p align="center">
+  <img src="plots/deep_sort_speed_comparison.png" width="2000" />
 </p>
 
 - **YOLO inference speed comparison executing on host or device for different NVIDIA platforms**
 <p align="center">
-  <img src="plots/comparison_host_device.png" width="400" />
+  <img src="plots/host_device_comparison.png" width="400" />
 </p>
 
 - **Evaluation on ARM Neoverse N1**
