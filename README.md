@@ -148,7 +148,12 @@ NA: Not Available
 
 - **Evaluation on BSC RISC-V Arriesgado platform with scalar instructions**
 
-... 
+<p align="center">
+  <img src="plots/Arriesgado RISC-V scalar/RISCV_Arriesgado_yolo_inference_speed.png" width="400" />
+  <img src="plots/Arriesgado RISC-V scalar/RISCV_Arriesgado_deep_sort_speed.png" width="400" /> 
+</p>
+
+<p align = "center"> <img src="plots/Arriesgado RISC-V scalar/RISCV_Arriesgado_utilization.png" width="400" /> 
 
 ***
 
