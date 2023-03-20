@@ -129,12 +129,12 @@ NA: Not Available
 
 #### **Comparison between the various platforms in terms of FPS** 
 <p align="center">
-  <img src="plots/fps.png" width="1000" />
+  <img src="plots/fps.png" width="1200" />
 </p>
 
 #### **YOLO inference speed comparison between NVIDIA platforms**
 <p align="center">
-  <img src="plots/comparison_host_device.png" width="600" />
+  <img src="plots/comparison_host_device.png" width="400" />
 </p>
 
 - **Evaluation on ARM Neoverse N1**
