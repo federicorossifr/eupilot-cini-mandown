@@ -137,7 +137,7 @@ NA: Not Available
   <img src="plots/yolo_inference_speed_comparison.png" width="2000" />
 </p>
 
-<font size=0.5> *out of scale </font>
+<br>*out of scale
 
 - **Comparison between different platforms in terms of DeepSORT algorithm execution speed**
 <p align="center">
