@@ -76,9 +76,9 @@ Three video test with different number of man down has been used to evaluate the
 
 **Platforms**   
 - platform 1: **ARM Cortex-A72** (Raspberry Pi 4B)
-- platform 2: **ARM Neoverse N1**
-- platform 3: **Fujitsu A64FX** (ARMv8-A based)
-- platform 4: **BSC RISC-V Arriesgado** (with scalar instructions)
+- platform 2: **ARM Neoverse N1** (10 threads)
+- platform 3: **Fujitsu A64FX** (ARMv8-A based, 24 threads)
+- platform 4: **BSC RISC-V Arriesgado** (scalar instructions, 4 threads)
 - platform 5: **NVIDIA Jetson AGX Orin**  
 - platform 6: **Intel i7-10750H with NVIDIA GeForce GTX 1650 Ti**  
 - platform 7: **Intel Xeon with NVIDIA Tesla T4**  
@@ -93,10 +93,10 @@ NA: Not Available
 
 | Platform | FPS | YOLO Inference Speed<br>(ms) | Man Down Classifier Speed<br>(ms) | DeepSORT Speed<br>(ms) |
 |:-:|:-:|:-:|:-:|:-:|
-| 1 | 0.1 | 7632 | 1.2 | 1032 |
-| 2 | 0.2 | 879 | 0.6 | 3794 |
-| 3 | 0.4 | 1221 | 1.1 | 1233 |
-| 4 | 0.005 | 142300 | 2.5 | 11539 |
+| 1 | 0.1 | 7493 | 1.2 | 1107 |
+| 2 | 0.8 | 758 | 0.6 | 503 |
+| 3 | 0.4 | 1292 | 1.1 | 1054 |
+| 4 | 0.006 | 148987 | 2.6 | 13835 |
 | 5 (:turtle:) | 0.05 | 2084 | 0.5 | 18155 |
 | 5 (:rocket:) | 7.7 | 38.8 | 0.5 | 54.9 |
 | 6 (:turtle:) | 1.0 | 807 | 0.2 | 207 |
@@ -111,10 +111,10 @@ NA: Not Available
 ### **Stats**
 | Platform | CPU Utilization Rate <br>(%) | CPU Temperature<br>(°C) | CPU Power Consumption<br>(W) | GPU Utilization Rate <br>(%) | GPU Temperature<br>(°C) | GPU Power Consumption<br>(W) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| 1 | 96.8 | 82.0 | NA | - | - | - |
-| 2 | 37.5 | 51.7 | NA | - | - | - |
-| 3 | 77.1 | NA | NA | - | - | - |
-| 4 | 76.1 | 41.9 | NA | - | - | - |
+| 1 | 96.6 | 83.0 | NA | - | - | - |
+| 2 | 5.8 | 51.7 | NA | - | - | - |
+| 3 | 39.5 | NA | NA | - | - | - |
+| 4 | 79.4 | 42.5 | NA | - | - | - |
 | 5 (:turtle:) | 98.3 | 58.2 | 16.8 | - | - | - |
 | 5 (:rocket:) | 45.7 | 52.2 | 6.7 | 34.1 | 47.0 | 16.0 |
 | 6 (:turtle:) | 40.8 | 91.8 | 43.2 | - | - | - |
@@ -126,6 +126,16 @@ NA: Not Available
 
 ***
 ### **Plots**
+
+#### **Comparison between the various platforms in terms of FPS** 
+<p align="center">
+  <img src="plots/fps.png" width="800" />
+</p>
+
+#### **Comparison between NVIDIA platforms**
+<p align="center">
+  <img src="plots/comparison_host_device.png" width="400" />
+</p>
 
 - **Evaluation on ARM Neoverse N1**
 
