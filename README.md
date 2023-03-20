@@ -129,7 +129,7 @@ NA: Not Available
 
 #### **Comparison between the various platforms in terms of FPS** 
 <p align="center">
-  <img src="plots/fps.png" width="1200" />
+  <img src="plots/fps.png" width="1400" />
 </p>
 
 #### **YOLO inference speed comparison between NVIDIA platforms**
