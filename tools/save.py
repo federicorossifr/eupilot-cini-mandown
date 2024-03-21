@@ -131,6 +131,11 @@ class SaveInfo:
             GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
             print(f"{color_str('bold', 'blue', 'GPU properties:')} Name: {GPU_name} | Device Index: {GPU_id} | Total Memory: {GPU_total_memory:.0f} MiB | Temperature: {GPU_temperature} °C | Power Consumption: {GPU_power_consumption:.1f} W")
+            with open(self.save_dir / 'info.csv', 'a') as f:
+                if self.write_info:
+                    f.truncate(0)
+                    self.write_info = False         
+                f.write("pre_process_speed, inference_speed, post_process_speed, man_down_speed, deep_sort_speed,CPU_utilization_rate, CPU_temperature, CPU_power_consumption, GPU_memory_used, GPU_utilization_rate, GPU_temperature, GPU_power_consumption\n")   
 
     def get_speed_informations(self, dt):
 
@@ -144,10 +149,15 @@ class SaveInfo:
 
         return speed_info
 
+    def read_CPU_temp(self):
+        with open("/sys/class/thermal/thermal_zone0/temp") as f:
+            lines = f.readlines()
+            return float(lines[0])/1000
+
     def get_CPU_informations(self):
         
         CPU_utilization_rate = psutil.cpu_percent()  # get CPU utilization rate in %
-        CPU_temperature = 0.0  # get CPU temperature in °C
+        CPU_temperature = self.read_CPU_temp()  # get CPU temperature in °C
         CPU_power_consumption = 0.0  # get CPU power consumption in W
 
         CPU_info = [CPU_utilization_rate, CPU_temperature, CPU_power_consumption]
@@ -162,25 +172,24 @@ class SaveInfo:
         GPU_power_consumption = pynvml.nvmlDeviceGetPowerUsage(self.index)/1000  # get GPU power consumption in W
 
         GPU_info = [GPU_memory_used, GPU_utilization_rate, GPU_temperature, GPU_power_consumption]
-
         return GPU_info
 
     def save(self, speed_info, CPU_info, GPU_info = None):
 
-        with open(self.save_dir / 'info.txt', 'a') as f:
+        with open(self.save_dir / 'info.csv', 'a') as f:
             if self.write_info:
                 f.truncate(0)
                 self.write_info = False
 
             # Write speed informations:
-            f.write(str(speed_info[0]) + ' ' + str(speed_info[1]) + ' ' + str(speed_info[2]) + 
-                ' ' + str(speed_info[3]) + ' ' + str(speed_info[4]))
+            f.write(str(speed_info[0]) + ', ' + str(speed_info[1]) + ', ' + str(speed_info[2]) + 
+                ', ' + str(speed_info[3]) + ', ' + str(speed_info[4]))
             
             # Write CPU informations:
-            f.write(' ' + str(CPU_info[0]) + ' ' + str(CPU_info[1]) + ' ' + str(CPU_info[2]))
+            f.write(', ' + str(CPU_info[0]) + ', ' + str(CPU_info[1]) + ', ' + str(CPU_info[2]))
 
             # Write GPU informations (if available):
             if GPU_info is not None:
-                f.write(' ' + str(GPU_info[0]) + ' ' + str(GPU_info[1]) + ' ' + str(GPU_info[2]) + ' ' + str(GPU_info[3]))
+                f.write(', ' + str(GPU_info[0]) + ', ' + str(GPU_info[1]) + ', ' + str(GPU_info[2]) + ', ' + str(GPU_info[3]))
 
             f.write('\n')

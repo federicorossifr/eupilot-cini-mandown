@@ -57,7 +57,7 @@ from tools.draw import Annotator, colors, color_str
 from tools.save import SaveInfo
 
 # Parameters:
-source = ROOT / 'data/videos/vid1.mp4'  # file/dir/URL/glob/screen/0(webcam)
+source = ROOT / 'data/videos/vid1_1_img'  # file/dir/URL/glob/screen/0(webcam)
 yolo_weights = WEIGHTS / 'yolov5x.pt'  # YOLOv5 model path
 reid_weights = WEIGHTS / 'osnet_x1_0_market1501.pt'  # ReID model path
 deep_sort_params_path = ROOT / 'data/deep_sort.yaml'  # dataset.yaml path
@@ -72,7 +72,7 @@ line_thickness = 3  # bounding box thickness (pixels)
 half = False  # use FP16 half-precision inference
 vid_stride = 1  # video frame-rate stride
 view_img = False  # show results
-save_img = False  # save images
+save_img = True  # save images
 save_txt = True  # save data to *.txt
 exist_ok = False  # existing project/name ok, do not increment
 augment = False  # augmented inference
@@ -107,6 +107,7 @@ deep_sort = DeepSORT(reid_weights, parameters = deep_sort_params, device = devic
 # Load Logger:
 data_logger = SaveInfo(save_dir, device)
 
+
 if webcam:
     view_img = check_imshow()
     cudnn.benchmark = True  # set True to speed up constant image size inference
@@ -121,6 +122,7 @@ vid_path, vid_writer = [None] * bs, [None] * bs
 model.warmup(imgsz = (1 if pt else bs, 3, *imgsz))  # warmup
 N, windows, dt = 0, [], [0.0, 0.0, 0.0, 0.0, 0.0]
 t_start = time_sync()
+print("Starting")
 for path, img, img0s, vid_cap, s in dataset:
     # Pre-process image:
     t1 = time_sync()
@@ -141,6 +143,7 @@ for path, img, img0s, vid_cap, s in dataset:
 
     # Apply NMS:
     t5 = time_sync()
+    #pred = pred[0]
     pred = pred.cpu() if pt else pred.cpu()  # RISISTEMARE
     pred = non_max_suppression(pred, conf_thres = 0.25, iou_thres = 0.45, classes = classes_to_detect, max_det = 1000)
     t6 = time_sync()

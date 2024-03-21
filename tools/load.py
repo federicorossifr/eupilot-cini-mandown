@@ -95,11 +95,9 @@ class LoadImages:
                 files.append(p)  # files
             else:
                 raise FileNotFoundError(f'{p} does not exist')
-
         images = [x for x in files if x.split('.')[-1].lower() in IMG_FORMATS]
         videos = [x for x in files if x.split('.')[-1].lower() in VID_FORMATS]
         ni, nv = len(images), len(videos)
-
         self.img_size = img_size
         self.stride = stride
         self.files = images + videos
@@ -159,6 +157,7 @@ class LoadImages:
         self.frame = 0
         self.cap = cv2.VideoCapture(path)
         self.frames = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        print("Frames",self.frames)
 
     def __len__(self):
         return self.nf  # number of files
