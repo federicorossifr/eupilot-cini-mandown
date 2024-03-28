@@ -19,7 +19,7 @@ function info = import_measures(filename, dataLines)
 
 % If dataLines is not specified, define defaults
 if nargin < 2
-    dataLines = [10, Inf];
+    dataLines = [30, Inf];
 end
 
 %% Set up the Import Options and import the data
@@ -39,5 +39,5 @@ opts.EmptyLineRule = "read";
 
 % Import the data
 info = readtable(filename, opts);
-
+info.total_frame_time = info.pre_process_speed + info.inference_speed + info.post_process_speed + info.man_down_speed + info.deep_sort_speed;
 end
